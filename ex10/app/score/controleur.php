@@ -41,13 +41,15 @@ function lister()
         if (isset($_SESSION['id']) && $_SESSION['id'] == $r['idUtilisateur']) {
             // liens
             $corps .= " - <a href=\"controleur.php?action=modifier&id=" . $r['id'] . "\">Modifier</a>";
-            $corps .= " | <a href=\"JavaScript:alertFunction(".$r['id'].")\">Supprimer</a>";
+            $corps .= " | <a href=\"JavaScript:alertFunction(" . $r['id'] . ")\">Supprimer</a>";
         }
         $corps .= "</li>";
     }
     $corps .= "</ul>";
     // lien pour création
-    $corps .= "<a href=\"controleur.php?action=creer\">Cr&eacute;er</a>";
+    if (isset($_SESSION['id'])) {
+        $corps .= "<a href=\"controleur.php?action=creer\">Cr&eacute;er</a>";
+    }
 
     // lien pour authentification
     if (!isset($_SESSION['mail'])) {
@@ -56,7 +58,7 @@ function lister()
         $loginLogout = $_SESSION['mail'] . " - <a href=\"../authentification/controleur.php?action=logout\">Logout</a>";
     }
 
-    $message="";
+    $message = "";
     $corps .= "<script type='text/javascript'>function alertFunction(idE){var r=confirm('Voulez-vous' +
  ' vraiment supprimer cet enregistrement ?');if(r===true){var lien = 'controleur.php?action=supprimer&id='+idE;location.replace(lien);}}</script>";
 

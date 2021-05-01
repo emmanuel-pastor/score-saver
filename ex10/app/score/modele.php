@@ -24,8 +24,8 @@ function recupereEnregistrementParId($id){
 	$con = connexion();
 	$query = "SELECT * FROM score WHERE id = $id";
 	$result = $con->query($query);
-	return $result->fetch_assoc();
 	fermeture($con);
+	return $result->fetch_assoc();
 }	
 function modifieEnregistrement($id, $donnees){
 	$valeur = $donnees['valeur'];

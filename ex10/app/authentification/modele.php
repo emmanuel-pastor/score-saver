@@ -9,8 +9,8 @@ function recupereEnregistrementParMailEtPassword($donnees)
     $con = connexion();
     $query = "SELECT * FROM utilisateur WHERE mail = '$mail' AND password = '$password'";
     $result = $con->query($query);
-    return $result->fetch_assoc();
     fermeture($con);
+    return $result->fetch_assoc();
 }
 
 ?>

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link href="../css/gabarit.css" rel="stylesheet"/>
+    <link href="../../public/css/gabarit.css" rel="stylesheet"/>
     <title><?php echo $titre; ?></title>
 </head>
 <body>

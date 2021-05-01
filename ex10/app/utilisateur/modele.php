@@ -19,8 +19,8 @@ function recupereEnregistrementParCle($cle) {
 	$con = connexion();
 	$query = "SELECT * FROM utilisateur WHERE cle = '$cle'";
 	$result = $con->query($query);
-	return $result->fetch_assoc();
 	fermeture($con);
+	return $result->fetch_assoc();
 }
 function validerUtilisateur($cle) {
 	// validation d'un utilisateur
