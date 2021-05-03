@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link href="../../public/css/gabarit.css" rel="stylesheet"/>
+    <link href=<?php echo BASE_PATH."css/gabarit.css"?> rel="stylesheet"/>
     <title><?php echo $titre; ?></title>
 </head>
 <body>
@@ -10,9 +10,9 @@
 <div id="auth">
     <?php
         if (!isset($_SESSION['mail'])) {
-            echo "<a href=\"../authentification/controleur.php?action=login\">Login</a>" . " - <a href=\"../utilisateur/controleur.php?action=creer\">Sign Up</a>";
+            echo "<a href=\"".BASE_PATH."authentification/login\">Login</a>" . " - <a href=\"".BASE_PATH."utilisateur/creer\">Sign Up</a>";
         } else {
-            echo $_SESSION['mail'] . " - <a href=\"../authentification/controleur.php?action=logout\">Logout</a>";
+            echo $_SESSION['mail'] . " - <a href=\"".BASE_PATH."authentification/logout\">Logout</a>";
         }
     ?>
 </div>

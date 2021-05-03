@@ -25,6 +25,9 @@ switch ($action) {
     case "supprimer":
         supprimer();
         break;
+    default:
+        echo "404 not found";
+        break;
 }
 
 // fonctions
@@ -39,13 +42,13 @@ function lister()
         $corps .= "<li>";
         $corps .= $r['id'] . ", " . $r['mail'];
         // liens
-        $corps .= " - <a href=\"controleur.php?action=modifier&id=" . $r['id'] . "\">Modifier</a>";
-        $corps .= " | <a href=\"controleur.php?action=supprimer&id=" . $r['id'] . "\">Supprimer</a>";
+        $corps .= " - <a href=\"".BASE_PATH."utilisateur/modifier/" . $r['id'] . "\">Modifier</a>";
+        $corps .= " | <a href=\"".BASE_PATH."utilisateur/supprimer/" . $r['id'] . "\">Supprimer</a>";
         $corps .= "</li>";
     }
     $corps .= "</ul>";
     // lien pour s'enregistrer
-    $corps .= "<a href=\"controleur.php?action=creer\">S'enregistrer</a>";
+    $corps .= "<a href=\"".BASE_PATH."utilisateur/creer\">S'enregistrer</a>";
     // affichage de la vue
     require "vue.php";
 }
@@ -71,13 +74,13 @@ function creer()
             //TODO: restore before deploy //envoiMailConfirmation($donnees);
             if (compteExisteDeja($donnees['mail'])) {
                 $titre = "Validation";
-                $corps = "Un compte avec le mail " . $donnees['mail'] . " existe déjà<br/><a href=\"../score/controleur.php?action=lister\">Revenir à la liste des scores</a>";
+                $corps = "Un compte avec le mail " . $donnees['mail'] . " existe déjà<br/><a href=\"".BASE_PATH."score/lister\">Revenir à la liste des scores</a>";
             } else {
                 // ajout de l'enregistrement
                 ajouteEnregistrement($donnees);
                 // message
                 $titre = "Validation";
-                $corps = "Votre compte a été créé. <br/><a href=\"../score/controleur.php?action=lister\">Revenir à la liste des scores</a>"; //TODO: Restore before deploy
+                $corps = "Votre compte a été créé. <br/><a href=\"".BASE_PATH."score/lister\">Revenir à la liste des scores</a>"; //TODO: Restore before deploy
                 /*"Votre compte à été créé. Un mail de confirmation
      vous a été envoyé à l'adresse ".$donnees['mail'].".";*/
             }
@@ -113,14 +116,14 @@ function valider()
     if ($utilisateur['valide'] == 1) {
         // affichage de la vue
         $titre = "Validation";
-        $corps = "Votre compte à déjà été validé. <a href=\"../score/controleur.php?action=lister\">Revenir à la liste des scores</a>";
+        $corps = "Votre compte à déjà été validé. <a href=\"".BASE_PATH."score/lister\">Revenir à la liste des scores</a>";
         require "vue.php";
     } else {
         // validation
         validerUtilisateur($cle);
         // affichage de la vue
         $titre = "Validation";
-        $corps = "Votre compte à bien été validé. Vous pouvez désormais vous connecter. <a href=\"../score/controleur.php?action=lister\">Revenir à la liste des scores</a>";
+        $corps = "Votre compte à bien été validé. Vous pouvez désormais vous connecter. <a href=\"".BASE_PATH."score/lister\">Revenir à la liste des scores</a>";
         require "vue.php";
     }
 }
@@ -130,10 +133,10 @@ function afficherFormulaire($mode, $donnees, $erreurs)
 {
     if ($mode == "creation") {
         $titre = "Création";
-        $action = "creer";
+        $action = BASE_PATH . "utilisateur/creer";
     } else if ($mode == "modification") {
         $titre = "Modification";
-        $action = "modifier";
+        $action = BASE_PATH . "utilisateur/modifier";
     }
     // création code HTML
     $id = $donnees['id'] ?? '';
@@ -142,7 +145,7 @@ function afficherFormulaire($mode, $donnees, $erreurs)
     $erreurMail = $erreurs['mail'] ?? '';
     $erreurPassword = $erreurs['password'] ?? '';
     $corps = <<<EOT
-<form id="creation-form" name="creation-form" method="post" action="controleur.php?action=$action">
+<form id="creation-form" name="creation-form" method="post" action="$action">
 <label for="mail">Mail</label>
 <input id="mail" type="email" name="mail" value="$mail" required aria-required="true" />
 <p class="erreur">$erreurMail</p>

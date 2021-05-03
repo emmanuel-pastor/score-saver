@@ -1,5 +1,5 @@
 <?php
-require "../_config/BD.php";
+require dirname(__FILE__)."/../_config/BD.php";
 
 function recupereEnregistrementParMailEtPassword($donnees)
 {

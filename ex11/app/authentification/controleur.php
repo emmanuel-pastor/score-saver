@@ -19,9 +19,12 @@ switch ($action) {
 	case "logout":
 	    logout();
 	    break;
+    default:
+        echo "404 not found";
+        break;
 }
 
-function login(){
+function login() {
 	$mode = "";
 	// affichage du formulaire
 	if ( !isset ($_POST['mail']) ) {
@@ -37,7 +40,7 @@ function login(){
 			// authentification réussie
 			authentificationReussie($utilisateur);
 			// redirection (sinon l'url demeurera action=creer)
-			header ('Location:../score/controleur.php?action=lister');
+			header ('Location:'.BASE_PATH.'score/lister');
 		} else {
 			// authentification non réussie
 			afficherFormulaire($mode, $_POST, $erreurs);
@@ -51,8 +54,9 @@ function afficherFormulaire($mode, $donnees, $erreurs){
 	$mail = $donnees['mail'] ?? '';
 	$password = $donnees['password'] ?? '';
 	$erreurAuth = $erreurs['auth'] ?? '';
+	$action = BASE_PATH."authentification/login";
 	$corps = <<<EOT
-<form id="creation-form" name="creation-form" method="post" action="controleur.php?action=login">
+<form id="creation-form" name="creation-form" method="post" action="$action">
 <label for="login">Login</label>
 <input id="mail" type="email" name="mail" value="$mail" required aria-required="true" />
 <p class="erreur"></p>
@@ -64,7 +68,7 @@ function afficherFormulaire($mode, $donnees, $erreurs){
 </form>
 EOT;
 	// affichage de la vue
-	require "../_config/gabarit.php";
+	require dirname(__FILE__)."/../_config/gabarit.php";
 }
 
 function testDonnees($donnees){
@@ -84,7 +88,8 @@ function authentificationReussie($donnees){
 function logout(){
 	session_destroy();
 	// redirection (sinon l'url demeurera action=creer)
-	header ('Location:../score/controleur.php?action=lister');
+    $path = BASE_PATH."score/lister";
+	header ('Location:'.$path);
 }
 
 

@@ -25,6 +25,9 @@ switch ($action) {
     case "supprimer":
         supprimer();
         break;
+    default:
+        echo "404 not found";
+        break;
 }
 
 // fonctions
@@ -40,7 +43,7 @@ function lister()
         $corps .= $r['id'] . ", " . $r['valeur'];
         if (isset($_SESSION['id']) && $_SESSION['id'] == $r['idUtilisateur']) {
             // liens
-            $corps .= " - <a href=\"controleur.php?action=modifier&id=" . $r['id'] . "\">Modifier</a>";
+            $corps .= " - <a href=\"".BASE_PATH."score/modifier/" . $r['id'] . "\">Modifier</a>";
             $corps .= " | <a href=\"JavaScript:alertFunction(" . $r['id'] . ")\">Supprimer</a>";
         }
         $corps .= "</li>";
@@ -48,26 +51,27 @@ function lister()
     $corps .= "</ul>";
     // lien pour création
     if (isset($_SESSION['id'])) {
-        $corps .= "<a href=\"controleur.php?action=creer\">Cr&eacute;er</a>";
+        $corps .= "<a href=\"".BASE_PATH."score/creer\">Cr&eacute;er</a>";
     }
 
     // lien pour authentification
     if (!isset($_SESSION['mail'])) {
-        $loginLogout = "<a href=\"../authentification/controleur.php?action=login\">Login</a>" . " - <a href=\"../utilisateur/controleur.php?action=creer\">Sign Up</a>";
+        $loginLogout = "<a href=\"".BASE_PATH."authentification/login\">Login</a>" . " - <a href=\"".BASE_PATH."utilisateur/creer\">Sign Up</a>";
     } else {
-        $loginLogout = $_SESSION['mail'] . " - <a href=\"../authentification/controleur.php?action=logout\">Logout</a>";
+        $loginLogout = $_SESSION['mail'] . " - <a href=\"".BASE_PATH."authentification/logout\">Logout</a>";
     }
 
+    $lien = BASE_PATH . "score/supprimer/";
     $message = "";
     $corps .= "<script type='text/javascript'>function alertFunction(idE){var r=confirm('Voulez-vous' +
- ' vraiment supprimer cet enregistrement ?');if(r===true){var lien = 'controleur.php?action=supprimer&id='+idE;location.replace(lien);}}</script>";
+ ' vraiment supprimer cet enregistrement ?');if(r===true){var lien = '$lien'+idE;location.replace(lien);}}</script>";
 
     // affichage de la vue
-    require "../_config/gabarit.php";
+    require dirname(__FILE__)."/../_config/gabarit.php";
 }
 
-function creer()
-{
+function creer() {
+    echo "TEST";
     $mode = "creation";
     // affichage du formulaire
     if (!isset ($_POST['valeur'])) {
@@ -82,7 +86,7 @@ function creer()
             // ajout
             ajouteEnregistrement($_POST);
             // redirection (sinon l'url demeurera action=creer)
-            header('Location:controleur.php?action=lister');
+            header('Location:'.BASE_PATH.'score/lister');
         } else {
             afficherFormulaire($mode, $_POST, $erreurs);
         }
@@ -96,7 +100,8 @@ function supprimer()
         die("requ&ecirc;te non autoris&eacute;e");
     }
     supprimeEnregistrement($_GET["id"]);
-    lister();
+    header('Location:'.BASE_PATH.'score/lister');
+    //lister();
 }
 
 function modifier()
@@ -131,27 +136,29 @@ function afficherFormulaire($mode, $donnees, $erreurs)
     $loginLogout = "";
     if ($mode == "creation") {
         $titre = "Création";
-        $action = "creer";
+        $action = BASE_PATH."score/creer";
     } else if ($mode == "modification") {
         $titre = "Modification";
-        $action = "modifier";
+        $action = BASE_PATH."score/modifier";
     }
     // création code HTML
     $valeur = $donnees['valeur'] ?? '';
     $id = $donnees['id'] ?? '';
     $erreurValeur = $erreurs['valeur'] ?? '';
+    $annuleForm = BASE_PATH."score/lister";
     $corps = <<<EOT
-<form id="creation-form" name="creation-form" method="post" action="controleur.php?action=$action">
+<form id="creation-form" name="creation-form" method="post" action="$action">
 <label for="valeur">Score</label>
 <input id="valeur" type="text" name="valeur" value="$valeur" required aria-required="true" />
 <p class="erreur">$erreurValeur</p>
 <br><br>
+<input type="button" value="Annuler" onclick="location.href='$annuleForm'">
 <button name='submit' type='submit' id='submit'>Valider</button>
 <input type='hidden' name='id' value='$id'/>
 </form>
 EOT;
     // affichage de la vue
-    require "../_config/gabarit.php";
+    require dirname(__FILE__)."/../_config/gabarit.php";
 }
 
 function testDonnees($donnees)

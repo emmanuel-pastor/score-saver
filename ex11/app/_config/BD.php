@@ -1,5 +1,4 @@
 <?php
-
 function connexion() {
     // connexion avec la BD
     $con = new mysqli("localhost", "root", "", "score-saver");
