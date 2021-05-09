@@ -5,4 +5,4 @@ RewriteBase /
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.+)$ Web/MO/score-saver/ex11/public/index.php?url=$1 [QSA,L]
+RewriteRule ^(.+)$ score-saver/ex11/public/index.php?url=$1 [QSA,L]

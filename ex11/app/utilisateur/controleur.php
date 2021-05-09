@@ -1,188 +1,174 @@
 <?php
 
 if (!isset ($_GET["action"])) {
-    die("requ&ecirc;te non autoris&eacute;e");
+    die("Requête non autorisée");
 }
+
 require "modele.php";
 
-// récupération des données passées en GET
 $action = $_GET['action'];
 
-// traitement selon l'action
 switch ($action) {
     case "lister":
-        lister();
+        listAll();
         break;
     case "creer":
-        creer();
-        break;
-    case "valider":
-        valider();
+        create();
         break;
     case "modifier":
-        modifier();
+        modify();
         break;
     case "supprimer":
-        supprimer();
+        delete();
         break;
     default:
-        echo "404 not found";
+        $corps = "<h2>Erreur 404</h2><br /><a href=\"" . BASE_PATH . "\">Revenir à l'acceuil</a>";
+        require "vue.php";
         break;
 }
 
-// fonctions
-function lister()
+function listAll()
 {
-    $titre = "Liste d'enregistrements";
-    // récupération des enregistrements
-    $result = recupereTous();
-    // création code HTML
+    $result = getAllUsers();
+
+    $title = "Liste des utilisateurs";
     $corps = "<ul>";
     while ($r = $result->fetch_assoc()) {
         $corps .= "<li>";
         $corps .= $r['id'] . ", " . $r['mail'];
-        // liens
-        $corps .= " - <a href=\"".BASE_PATH."utilisateur/modifier/" . $r['id'] . "\">Modifier</a>";
-        $corps .= " | <a href=\"".BASE_PATH."utilisateur/supprimer/" . $r['id'] . "\">Supprimer</a>";
+        $corps .= " - <a href=\"" . BASE_PATH . "utilisateur/modifier/" . $r['id'] . "\">Modifier</a>";
+        $corps .= " | <a href=\"" . BASE_PATH . "utilisateur/supprimer/" . $r['id'] . "\">Supprimer</a>";
         $corps .= "</li>";
     }
     $corps .= "</ul>";
-    // lien pour s'enregistrer
-    $corps .= "<a href=\"".BASE_PATH."utilisateur/creer\">S'enregistrer</a>";
-    // affichage de la vue
+
     require "vue.php";
 }
 
-function creer()
+function create()
 {
     $mode = "creation";
-    // affichage du formulaire
-    if (!isset ($_POST['mail'])) {
-        // pas de données => affichage
-        $donnees = null;
-        $erreurs = null;
-        afficherFormulaire($mode, $donnees, $erreurs);
-    } else {
-        // données => test
-        $erreurs = testDonnees($_POST);
-        if ($erreurs == null) {
-            $donnees = $_POST;
-            // génération aléatoire d'une clé
-            $cle = md5(microtime(TRUE) * 100000);
-            $donnees['cle'] = $cle;
-            // envoi du mail
-            //TODO: restore before deploy //envoiMailConfirmation($donnees);
-            if (compteExisteDeja($donnees['mail'])) {
-                $titre = "Validation";
-                $corps = "Un compte avec le mail " . $donnees['mail'] . " existe déjà<br/><a href=\"".BASE_PATH."score/lister\">Revenir à la liste des scores</a>";
+
+    if (!isset ($_POST['mail'])) { // No email => user needs to be created
+        $data = null;
+        $error = null;
+        showForm($mode, $data, $error);
+    } else { // The form has been submitted
+        $data = $_POST;
+        $error = validateForm($data);
+
+        if ($error == null) {
+            // Generate a random validation key
+            $validationKey = md5(microtime(TRUE) * 100000);
+            $data['cle'] = $validationKey;
+
+            $title = "Validation";
+            if (accountAlreadyExists($data['mail'])) {
+                $corps = "Un compte avec le mail " . $data['mail'] . " existe déjà<br/><a href=\"" . BASE_PATH . "score/lister\">Revenir à la liste des scores</a>";
             } else {
-                // ajout de l'enregistrement
-                ajouteEnregistrement($donnees);
-                // message
-                $titre = "Validation";
-                $corps = "Votre compte a été créé. <br/><a href=\"".BASE_PATH."score/lister\">Revenir à la liste des scores</a>"; //TODO: Restore before deploy
+                insertUser($data);
+                //TODO: restore before deploy //sendConfirmationEmail($donnees);
+
+                $corps = "Votre compte a été créé. <br/><a href=\"" . BASE_PATH . "score/lister\">Revenir à la liste des scores</a>"; //TODO: Restore before deploy
                 /*"Votre compte à été créé. Un mail de confirmation
      vous a été envoyé à l'adresse ".$donnees['mail'].".";*/
             }
+
             require "vue.php";
         } else {
-            afficherFormulaire($mode, $_POST, $erreurs);
+            showForm($mode, $data, $error);
         }
     }
 }
 
-function compteExisteDeja($mail)
-{
-    $utilisateur = recupereUtilisateurParMail($mail);
-    return isset($utilisateur);
-}
-
-
-function valider()
-{
-    // validation d'un compte
-    if (!isset($_GET["cle"])) {
-        // pas de données
-        die("requ&ecirc;te non autoris&eacute;e");
-    }
-    $cle = $_GET["cle"];
-    echo $cle;
-    // recherche de l'utilisateur
-    $utilisateur = recupereEnregistrementParCle($cle);
-    if (!isset($utilisateur)) {
-        // aucun utilisateur
-        die("cl&egrave; non valide");
-    }
-    if ($utilisateur['valide'] == 1) {
-        // affichage de la vue
-        $titre = "Validation";
-        $corps = "Votre compte à déjà été validé. <a href=\"".BASE_PATH."score/lister\">Revenir à la liste des scores</a>";
-        require "vue.php";
-    } else {
-        // validation
-        validerUtilisateur($cle);
-        // affichage de la vue
-        $titre = "Validation";
-        $corps = "Votre compte à bien été validé. Vous pouvez désormais vous connecter. <a href=\"".BASE_PATH."score/lister\">Revenir à la liste des scores</a>";
-        require "vue.php";
-    }
-}
-
-
-function afficherFormulaire($mode, $donnees, $erreurs)
+function showForm($mode, $data, $errors)
 {
     if ($mode == "creation") {
-        $titre = "Création";
+        $title = "Création d'un compte";
         $action = BASE_PATH . "utilisateur/creer";
     } else if ($mode == "modification") {
-        $titre = "Modification";
+        $title = "Modification";
         $action = BASE_PATH . "utilisateur/modifier";
     }
-    // création code HTML
-    $id = $donnees['id'] ?? '';
-    $mail = $donnees['mail'] ?? '';
-    $password = $donnees['password'] ?? '';
-    $erreurMail = $erreurs['mail'] ?? '';
-    $erreurPassword = $erreurs['password'] ?? '';
+
+    $id = $data['id'] ?? '';
+    $email = $data['mail'] ?? '';
+    $password = $data['password'] ?? '';
+    $emailError = $errors['email'] ?? '';
+    $passwordError = $errors['password'] ?? '';
+    $idError = $errors['id'] ?? '';
+
     $corps = <<<EOT
 <form id="creation-form" name="creation-form" method="post" action="$action">
-<label for="mail">Mail</label>
-<input id="mail" type="email" name="mail" value="$mail" required aria-required="true" />
-<p class="erreur">$erreurMail</p>
-<br>
-<label for="password">Password</label>
-<input id="password" type="password" name="password" value="$password" required aria-required="true" />
-<p class="erreur">$erreurPassword</p>
-<br>
-<button name='submit' type='submit' id='submit'>Valider</button>
-<input type='hidden' name='id' value='$id'/>
+    <label for="mail">Mail</label>
+    <input id="mail" type="email" name="mail" value="$email" required aria-required="true" />
+    <p class="error">$emailError</p>
+    <br>
+    <label for="password">Password</label>
+    <input id="password" type="password" name="password" value="$password" required aria-required="true" />
+    <p class="error">$passwordError</p>
+    <br>
+    <p class="error">$idError</p>
+    <input type='hidden' name='id' value='$id'/>
+    <button name='submit' type='submit' id='submit'>Valider</button>
 </form>
 EOT;
-    // affichage de la vue
+
     require "vue.php";
 }
 
-function testDonnees($donnees)
+function validateForm($data): array
 {
-    $erreurs = array();
-    return $erreurs;
+    $error = array();
+    if (!isset($data['mail'])) {
+        $error['email'] = "Mail non renseigné";
+    }
+    if (!isset($data['password'])) {
+        $error['password'] = "Mot de passe non renseigné";
+    }
+    if (!isset($data['id'])) {
+        $error['id'] = "Identifiant non spécifié";
+    }
+    return $error;
 }
 
-function envoiMailConfirmation($donnees)
+function accountAlreadyExists($email): bool
 {
-    $destinataire = $donnees['mail'];
-    $cle = $donnees['cle'];
-    $sujet = "Activer votre compte";
-    $entete = "From: inscription@ssa-apis.com";
-    // Le lien d'activation est composé de la clé(cle)
-    $message = 'Bienvenue sur VotreSite,
-Pour activer votre compte, veuillez cliquer sur le lien ci dessous
-ou copier/coller dans votre navigateur internet.
-http://votresite.com/utilisateur/controleur.php?action=validation&cle=' . urlencode($cle) . '
+    $user = getUserByEmail($email);
+    return isset($user);
+}
+
+function sendConfirmationEmail($data)
+{
+    $email = $data['mail'];
+    $validationKey = $data['cle'];
+    $subject = "Activer votre compte " . HOST_NAME;
+    $header = "From: " . CONFIRMATION_EMAIL;
+    $message = 'Bienvenue sur ' . HOST_NAME . ',
+Pour activer votre compte, veuillez cliquer sur le lien ci-dessous
+ou le copier/coller dans votre navigateur.
+https://' . HOST_NAME . '/utilisateur/validation/' . urlencode($validationKey) . '
 ---------------
 Ceci est un mail automatique, Merci de ne pas y répondre.';
-    // envoi
-    mail($destinataire, $sujet, $message, $entete);
+
+    // Send email
+    mail($email, $subject, $message, $header);
 }
 
-?>
+function modify()
+{
+    $corps = "Page pas encore implémentée";
+    require "vue.php";
+    //todo implement
+    //if admin, make update request
+    //else show error
+}
+
+function delete()
+{
+    $corps = "Page pas encore implémentée";
+    require "vue.php";
+    //todo implement
+    //if admin, make delete request
+    //else show error
+}

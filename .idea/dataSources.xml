@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="score-saver@localhost" uuid="575c2afc-2c93-4681-b61c-4e259006aabe">
+    <data-source source="LOCAL" name="score_saver@localhost" uuid="575c2afc-2c93-4681-b61c-4e259006aabe">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/score-saver</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/score_saver</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <driver-properties>
         <property name="serverTimezone" value="UTC" />

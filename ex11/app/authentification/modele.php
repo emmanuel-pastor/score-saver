@@ -1,17 +1,12 @@
 <?php
-require dirname(__FILE__)."/../_config/BD.php";
+require dirname(__FILE__) . "/../_config/DB.php";
 
-function recupereEnregistrementParMailEtPassword($donnees)
+function getEmailByEmailAndPassword($email, $password): ?array
 {
-    // récupération d'un enregistrement
-    $mail = $donnees['mail'];
-    $password = $donnees['password'];
-    $con = connexion();
-    $query = "SELECT * FROM utilisateur WHERE mail = '$mail' AND password = '$password'";
-    $result = $con->query($query);
-    fermeture($con);
+    $db = openConnection();
+    $query = "SELECT * FROM utilisateur WHERE mail = '$email' AND password = '$password'";
+    $result = $db->query($query);
+    closeConnection($db);
     return $result->fetch_assoc();
 }
-
-?>
 

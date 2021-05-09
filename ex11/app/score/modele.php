@@ -1,47 +1,44 @@
 <?php
-require dirname(__FILE__)."/../_config/BD.php";
+require dirname(__FILE__) . "/../_config/DB.php";
 
-function recupereTous(){
-	// récupération de tous les enregistrements
-	$con = connexion();
+function insertScore($score){
+	$value = $score['valeur'];
+	$con = openConnection();
+	$query = "INSERT INTO score (`id`, `valeur`, `date`, `idUtilisateur`)
+		VALUES (NULL, '".$value."', '".date('Y-m-d')."', '".$_SESSION['id']."');";
+	$con->query($query);
+	closeConnection($con);
+}
+
+function getAllScores(){
+	$db = openConnection();
 	$query = "SELECT * FROM score";
-	$result = $con->query($query);
-	fermeture($con);
+	$result = $db->query($query);
+	closeConnection($db);
 	return $result;
 }
 
-function ajouteEnregistrement($donnees){
-	$valeur = $donnees['valeur'];
-	// ajout d'un enregistrement
-	$con = connexion();
-	$query = "INSERT INTO score (`id`, `valeur`, `date`, `idUtilisateur`)
-		VALUES (NULL, '".$valeur."', '".date('Y-m-d')."', '".$_SESSION['id']."');";
-	$result = $con->query($query);
-	fermeture($con);	
-}
-function recupereEnregistrementParId($id){
-	// récupération d'un enregistrement
-	$con = connexion();
-	$query = "SELECT * FROM score WHERE id = $id";
-	$result = $con->query($query);
-	fermeture($con);
+function getScoreById($id): ?array
+{
+	$db = openConnection();
+	$query = "SELECT * FROM score WHERE id = $id LIMIT 1";
+	$result = $db->query($query);
+	closeConnection($db);
 	return $result->fetch_assoc();
-}	
-function modifieEnregistrement($id, $donnees){
-	$valeur = $donnees['valeur'];
-	// récupération d'un enregistrement
-	$con = connexion();
-	$query = "UPDATE score SET `valeur` = $valeur WHERE id = $id;";
-	$result = $con->query($query);
-	fermeture($con);
 }
-function supprimeEnregistrement($id){
-	// suppression d'un enregistrement
-	$con = connexion();
+
+function updateScore($id, $updatedScore){
+	$value = $updatedScore['valeur'];
+	$db = openConnection();
+	$query = "UPDATE score SET `valeur` = $value WHERE id = $id;";
+	$db->query($query);
+	closeConnection($db);
+}
+
+function deleteScoreById($id){
+	$db = openConnection();
 	$query = "DELETE FROM score WHERE id = $id";
-	$result = $con->query($query);
-	fermeture($con);
-}	
-	
-?>
+	$db->query($query);
+	closeConnection($db);
+}
 

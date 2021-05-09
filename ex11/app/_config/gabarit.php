@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link href=<?php echo BASE_PATH."css/gabarit.css"?> rel="stylesheet"/>
-    <title><?php echo $titre; ?></title>
+    <title><?php echo $title; ?></title>
 </head>
 <body>
 <div id="bandeau">bandeau...</div>

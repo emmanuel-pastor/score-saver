@@ -1,174 +1,163 @@
 <?php
 
-session_start();
-
 if (!isset ($_GET["action"])) {
-    die("requ&ecirc;te non autoris&eacute;e");
+    die("Requête non autorisée");
 }
 
 require "modele.php";
 
-// récupération des données passées en GET
 $action = $_GET['action'];
 
-// traitement selon l'action
 switch ($action) {
     case "lister":
-        lister();
+        listAll();
         break;
     case "creer":
-        creer();
+        create();
         break;
     case "modifier":
-        modifier();
+        modify();
         break;
     case "supprimer":
-        supprimer();
+        delete();
         break;
     default:
-        echo "404 not found";
+        $corps = "<h2>Erreur 404</h2><br /><a href=\"" . BASE_PATH . "\">Revenir à l'acceuil</a>";
+        require dirname(__FILE__)."/../_config/gabarit.php";
         break;
 }
 
-// fonctions
-function lister()
+function listALl()
 {
-    $titre = "Liste de scores";
-    // récupération des enregistrements
-    $result = recupereTous();
-    // création code HTML
+    $result = getAllScores();
+
+    $title = "Liste des scores";
+
+    // Scores from the list
     $corps = "<ul>";
     while ($r = $result->fetch_assoc()) {
         $corps .= "<li>";
-        $corps .= $r['id'] . ", " . $r['valeur'];
+        $corps .= 'id: ' . $r['id'] . " | score: " . $r['valeur'];
         if (isset($_SESSION['id']) && $_SESSION['id'] == $r['idUtilisateur']) {
-            // liens
             $corps .= " - <a href=\"".BASE_PATH."score/modifier/" . $r['id'] . "\">Modifier</a>";
             $corps .= " | <a href=\"JavaScript:alertFunction(" . $r['id'] . ")\">Supprimer</a>";
         }
         $corps .= "</li>";
     }
     $corps .= "</ul>";
-    // lien pour création
+
+    // Creation link
     if (isset($_SESSION['id'])) {
-        $corps .= "<a href=\"".BASE_PATH."score/creer\">Cr&eacute;er</a>";
+        $corps .= "<a href=\"".BASE_PATH."score/creer\">Créer</a>";
     }
 
-    // lien pour authentification
-    if (!isset($_SESSION['mail'])) {
-        $loginLogout = "<a href=\"".BASE_PATH."authentification/login\">Login</a>" . " - <a href=\"".BASE_PATH."utilisateur/creer\">Sign Up</a>";
-    } else {
-        $loginLogout = $_SESSION['mail'] . " - <a href=\"".BASE_PATH."authentification/logout\">Logout</a>";
-    }
+    // Deletion popup message
+    $deletionLink = BASE_PATH . "score/supprimer/";
+    $message = 'Voulez-vous vraiment supprimer cet enregistrement ?';
+    $corps .= "<script type='text/javascript'>function alertFunction(idE){var r=confirm('$message');if(r===true){var lien = '$deletionLink'+idE;location.replace(lien);}}</script>";
 
-    $lien = BASE_PATH . "score/supprimer/";
-    $message = "";
-    $corps .= "<script type='text/javascript'>function alertFunction(idE){var r=confirm('Voulez-vous' +
- ' vraiment supprimer cet enregistrement ?');if(r===true){var lien = '$lien'+idE;location.replace(lien);}}</script>";
-
-    // affichage de la vue
     require dirname(__FILE__)."/../_config/gabarit.php";
 }
 
-function creer() {
-    echo "TEST";
+function create() {
     $mode = "creation";
-    // affichage du formulaire
-    if (!isset ($_POST['valeur'])) {
-        // pas de données => affichage
-        $donnees = null;
-        $erreurs = null;
-        afficherFormulaire($mode, $donnees, $erreurs);
-    } else {
-        // données => test
-        $erreurs = testDonnees($_POST);
-        if ($erreurs == null) {
-            // ajout
-            ajouteEnregistrement($_POST);
-            // redirection (sinon l'url demeurera action=creer)
+
+    if (!isset ($_POST['valeur'])) { // No value => user wants to create a new score
+        $data = null;
+        $errors = null;
+        showForm($mode, $data, $errors);
+    } else { // The form has been submitted
+        $errors = validateForm($_POST);
+        if ($errors == null) {
+            insertScore($_POST);
+
+            // Redirect to the list of scores
             header('Location:'.BASE_PATH.'score/lister');
         } else {
-            afficherFormulaire($mode, $_POST, $erreurs);
+            showForm($mode, $_POST, $errors);
         }
     }
 }
 
-function supprimer()
+function modify()
 {
-    if (!isset ($_GET["id"])) {
-        // pas de données
-        die("requ&ecirc;te non autoris&eacute;e");
+    if (!isset ($_GET["id"]) && !isset ($_POST["id"])) { // Score to modify is not specified
+        die("Requête non autorisée");
     }
-    supprimeEnregistrement($_GET["id"]);
-    header('Location:'.BASE_PATH.'score/lister');
-    //lister();
-}
 
-function modifier()
-{
-    if (!isset ($_GET["id"]) && !isset ($_POST["id"])) {
-        // pas de données
-        die("requ&ecirc;te non autoris&eacute;e");
-    }
     $mode = "modification";
-    // affichage du formulaire
-    if (!isset ($_POST["valeur"])) {
-        // pas de données en POST (mais en GET) => affichage avec les données de l'enregistrement
-        $donnees = recupereEnregistrementParId($_GET["id"]);
-        $donnees['id'] = $_GET["id"];
-        $erreurs = null;
-        afficherFormulaire($mode, $donnees, $erreurs);
-    } else {
-        // données en POST => test
-        $erreurs = testDonnees($_POST);
-        if ($erreurs == null) {
-            // ajout
-            modifieEnregistrement($_POST["id"], $_POST);
-            lister();
+
+    if (!isset ($_POST["valeur"])) { // No value => user wants to modify a score
+        $score = getScoreById($_GET["id"]);
+        $score['id'] = $_GET["id"];
+        $errors = null;
+
+        showForm($mode, $score, $errors);
+    } else { // The form has been submitted
+        $errors = validateForm($_POST);
+
+        if ($errors == null) {
+            updateScore($_POST["id"], $_POST);
+
+            // Redirect to list of scores
+            header('Location:'.BASE_PATH.'score/lister');
         } else {
-            afficherFormulaire($mode, $_POST, $erreurs);
+            showForm($mode, $_POST, $errors);
         }
     }
 }
 
-function afficherFormulaire($mode, $donnees, $erreurs)
+function showForm($mode, $data, $errors)
 {
-    $loginLogout = "";
     if ($mode == "creation") {
-        $titre = "Création";
+        $title = "Création";
         $action = BASE_PATH."score/creer";
     } else if ($mode == "modification") {
-        $titre = "Modification";
+        $title = "Modification";
         $action = BASE_PATH."score/modifier";
     }
-    // création code HTML
-    $valeur = $donnees['valeur'] ?? '';
-    $id = $donnees['id'] ?? '';
-    $erreurValeur = $erreurs['valeur'] ?? '';
-    $annuleForm = BASE_PATH."score/lister";
+
+    $value = $data['valeur'] ?? '';
+    $id = $data['id'] ?? '';
+    $valueError = $errors['valeur'] ?? '';
+    $idError = $errors['id'] ?? '';
+    $cancelFormLink = BASE_PATH."score/lister";
+
     $corps = <<<EOT
 <form id="creation-form" name="creation-form" method="post" action="$action">
-<label for="valeur">Score</label>
-<input id="valeur" type="text" name="valeur" value="$valeur" required aria-required="true" />
-<p class="erreur">$erreurValeur</p>
-<br><br>
-<input type="button" value="Annuler" onclick="location.href='$annuleForm'">
-<button name='submit' type='submit' id='submit'>Valider</button>
-<input type='hidden' name='id' value='$id'/>
+    <label for="valeur">Score</label>
+    <input id="valeur" type="text" name="valeur" value="$value" required aria-required="true" />
+    <p class="erreur">$valueError</p>
+    <input type='hidden' name='id' value='$id'/>
+    <p class="erreur">$idError</p>
+    <br>
+    <input type="button" value="Annuler" onclick="location.href='$cancelFormLink'">
+    <button name='submit' type='submit' id='submit'>Valider</button>
 </form>
 EOT;
-    // affichage de la vue
+
     require dirname(__FILE__)."/../_config/gabarit.php";
 }
 
-function testDonnees($donnees)
+function validateForm($data): array
 {
-    $erreurs = [];
-    // test si le score est une valeur numérique
-    if (!is_numeric($donnees['valeur'])) {
-        $erreurs['valeur'] = "la valeur entrée doit être un nombre";
+    $errors = [];
+    if (!is_numeric($data['valeur'])) {
+        $errors['valeur'] = "La valeur entrée doit être un nombre";
     }
-    return $erreurs;
+    if (!isset($data['id'])) {
+        $errors['id'] = "L'identifiant du score n'a pas été renseigné.";
+    }
+    return $errors;
 }
 
-?>
+function delete()
+{
+    if (!isset ($_GET["id"])) {
+        die("Requête non autorisée");
+    }
+
+    deleteScoreById($_GET["id"]);
+
+    header('Location:'.BASE_PATH.'score/lister');
+}

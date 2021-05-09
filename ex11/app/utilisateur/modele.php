@@ -1,52 +1,52 @@
 <?php
-require dirname(__FILE__)."/../_config/BD.php";
+require dirname(__FILE__) . "/../_config/DB.php";
 
-function ajouteEnregistrement($donnees){
-	$mail = $donnees['mail'];
-	$password = $donnees['password'];
-	$valide = 1; //TODO: pass to 0 before deploy
-	$cle = $donnees['cle'];
-	// ajout d'un enregistrement
-	$con = connexion();
-	$query = "INSERT INTO utilisateur (`id`, `mail`, `password`, `valide`, `cle`)
-		VALUES (NULL, '".$mail."', '".$password."', '".$valide."', '".$cle."');";
-	$result = $con->query($query);
-	fermeture($con);	
-}
+function insertUser($user)
+{
+    $email = $user['mail'];
+    $password = $user['password'];
+    $isValid = 1; //TODO: pass to 0 before deploy
+    $validationKey = $user['cle'];
 
-function recupereEnregistrementParCle($cle) {
-	// récupération d'un enregistrement
-	$con = connexion();
-	$query = "SELECT * FROM utilisateur WHERE cle = '$cle'";
-	$result = $con->query($query);
-	fermeture($con);
-	return $result->fetch_assoc();
-}
-function validerUtilisateur($cle) {
-	// validation d'un utilisateur
-	$con = connexion();
-	$query = "UPDATE utilisateur SET `valide` = 1 WHERE cle = '$cle';";
-	$result = $con->query($query);
-	fermeture($con);
+    $db = openConnection();
+    $query = "INSERT INTO utilisateur (`id`, `mail`, `password`, `valide`, `cle`)
+		VALUES (NULL, '" . $email . "', '" . $password . "', '" . $isValid . "', '" . $validationKey . "');";
+    $db->query($query);
+    closeConnection($db);
 }
 
-function recupereTous(){
-	// récupération de tous les enregistrements
-	$con = connexion();
-	$query = "SELECT * FROM utilisateur";
-	$result = $con->query($query);
-	fermeture($con);
-	return $result;
+function getUserByValidationKey($key): ?array
+{
+    $db = openConnection();
+    $query = "SELECT * FROM utilisateur WHERE cle = '$key'";
+    $result = $db->query($query);
+    closeConnection($db);
+    return $result->fetch_assoc();
 }
 
-function recupereUtilisateurParMail($mail) {
-	$con = connexion();
-	$query = "SELECT * FROM utilisateur WHERE mail = '$mail' LIMIT 1";
-	$result = $con->query($query);
-	fermeture($con);
-	return $result->fetch_assoc();
+function validateUser($key)
+{
+    $db = openConnection();
+    $query = "UPDATE utilisateur SET `valide` = 1 WHERE cle = '$key';";
+    $db->query($query);
+    closeConnection($db);
 }
-	
-	
-?>
+
+function getAllUsers()
+{
+    $con = openConnection();
+    $query = "SELECT * FROM utilisateur";
+    $result = $con->query($query);
+    closeConnection($con);
+    return $result;
+}
+
+function getUserByEmail($email): ?array
+{
+    $db = openConnection();
+    $query = "SELECT * FROM utilisateur WHERE mail = '$email' LIMIT 1";
+    $result = $db->query($query);
+    closeConnection($db);
+    return $result->fetch_assoc();
+}
 
