@@ -4,7 +4,7 @@ require dirname(__FILE__) . "/../_config/DB.php";
 function insertUser($user)
 {
     $email = $user['mail'];
-    $password = $user['password'];
+    $password = md5($user['password']);
     $isValid = 1; //TODO: pass to 0 before deploy
     $validationKey = $user['cle'];
 
