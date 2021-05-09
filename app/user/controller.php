@@ -4,7 +4,7 @@ if (!isset ($_GET["action"])) {
     die("Requête non autorisée");
 }
 
-require "modele.php";
+require "model.php";
 
 $action = $_GET['action'];
 
@@ -23,7 +23,7 @@ switch ($action) {
         break;
     default:
         $corps = "<h2>Erreur 404</h2><br /><a href=\"" . BASE_PATH . "\">Revenir à l'acceuil</a>";
-        require "vue.php";
+        require dirname(__FILE__) . "/../_config/template.php";
         break;
 }
 
@@ -42,7 +42,7 @@ function listAll()
     }
     $corps .= "</ul>";
 
-    require "vue.php";
+    require dirname(__FILE__) . "/../_config/template.php";
 }
 
 function create()
@@ -74,7 +74,7 @@ function create()
      vous a été envoyé à l'adresse ".$donnees['email'].".";*/
             }
 
-            require "vue.php";
+            require dirname(__FILE__) . "/../_config/template.php";
         } else {
             showForm($mode, $data, $error);
         }
@@ -114,7 +114,7 @@ function showForm($mode, $data, $errors)
 </form>
 EOT;
 
-    require "vue.php";
+    require dirname(__FILE__) . "/../_config/template.php";
 }
 
 function validateForm($data): array
@@ -158,7 +158,7 @@ Ceci est un mail automatique, Merci de ne pas y répondre.';
 function modify()
 {
     $corps = "Page pas encore implémentée";
-    require "vue.php";
+    require dirname(__FILE__) . "/../_config/template.php";
     //todo implement
     //if admin, make update request
     //else show error
@@ -167,7 +167,7 @@ function modify()
 function delete()
 {
     $corps = "Page pas encore implémentée";
-    require "vue.php";
+    require dirname(__FILE__) . "/../_config/template.php";
     //todo implement
     //if admin, make delete request
     //else show error

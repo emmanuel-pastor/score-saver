@@ -4,7 +4,7 @@ if (!isset ($_GET["action"])) {
     die("Requête non autorisée");
 }
 
-require "modele.php";
+require "model.php";
 
 $action = $_GET['action'];
 
@@ -23,7 +23,7 @@ switch ($action) {
         break;
     default:
         $corps = "<h2>Erreur 404</h2><br /><a href=\"" . BASE_PATH . "\">Revenir à l'acceuil</a>";
-        require dirname(__FILE__) . "/../_config/gabarit.php";
+        require dirname(__FILE__) . "/../_config/template.php";
         break;
 }
 
@@ -56,7 +56,7 @@ function listALl()
     $message = 'Voulez-vous vraiment supprimer cet enregistrement ?';
     $corps .= "<script type='text/javascript'>function alertFunction(idE){var r=confirm('$message');if(r===true){var lien = '$deletionLink'+idE;location.replace(lien);}}</script>";
 
-    require dirname(__FILE__) . "/../_config/gabarit.php";
+    require dirname(__FILE__) . "/../_config/template.php";
 }
 
 function create() {
@@ -136,7 +136,7 @@ function showForm($mode, $data, $errors)
 </form>
 EOT;
 
-    require dirname(__FILE__) . "/../_config/gabarit.php";
+    require dirname(__FILE__) . "/../_config/template.php";
 }
 
 function validateForm($data): array

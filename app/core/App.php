@@ -34,7 +34,7 @@ if (
     file_exists(dirname(__FILE__) . "/../$module")
     && !is_file(dirname(__FILE__) . "/../$module")
 ) {
-    require dirname(__FILE__) . "/../$module/controleur.php";
+    require dirname(__FILE__) . "/../$module/controller.php";
 } else {
-    require dirname(__FILE__) . "/../score/controleur.php";
+    require dirname(__FILE__) . "/../score/controller.php";
 }

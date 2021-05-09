@@ -4,7 +4,7 @@ if (!isset ($_GET["action"])) {
 	die("Requête non autorisée");
 }
 
-require "modele.php";
+require "model.php";
 
 $action = $_GET['action'];
 
@@ -17,7 +17,7 @@ switch ($action) {
 	    break;
     default:
         $corps = "<h2>Erreur 404</h2><br /><a href=\"" . BASE_PATH . "\">Revenir à l'acceuil</a>";
-        require dirname(__FILE__) . "/../_config/gabarit.php";
+        require dirname(__FILE__) . "/../_config/template.php";
         break;
 }
 
@@ -62,7 +62,7 @@ function showForm($data, $errors){
 </form>
 EOT;
 
-	require dirname(__FILE__) . "/../_config/gabarit.php";
+	require dirname(__FILE__) . "/../_config/template.php";
 }
 
 function validateForm($data): array
