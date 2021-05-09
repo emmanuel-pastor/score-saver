@@ -1,7 +1,7 @@
 <?php
 function openConnection(): mysqli
 {
-    return new mysqli("localhost", "manu", "root", "score_saver");
+    return new mysqli(HOST_NAME, DB_USER, DB_PASSWORD, DB_NAME);
 }
 
 function closeConnection($connection) {
