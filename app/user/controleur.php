@@ -9,16 +9,16 @@ require "modele.php";
 $action = $_GET['action'];
 
 switch ($action) {
-    case "lister":
+    case "list":
         listAll();
         break;
-    case "creer":
+    case "create":
         create();
         break;
-    case "modifier":
+    case "modify":
         modify();
         break;
-    case "supprimer":
+    case "delete":
         delete();
         break;
     default:
@@ -35,9 +35,9 @@ function listAll()
     $corps = "<ul>";
     while ($r = $result->fetch_assoc()) {
         $corps .= "<li>";
-        $corps .= $r['id'] . ", " . $r['mail'];
-        $corps .= " - <a href=\"" . BASE_PATH . "utilisateur/modifier/" . $r['id'] . "\">Modifier</a>";
-        $corps .= " | <a href=\"" . BASE_PATH . "utilisateur/supprimer/" . $r['id'] . "\">Supprimer</a>";
+        $corps .= $r['id'] . ", " . $r['email'];
+        $corps .= " - <a href=\"" . BASE_PATH . "user/modify/" . $r['id'] . "\">Modifier</a>";
+        $corps .= " | <a href=\"" . BASE_PATH . "user/delete/" . $r['id'] . "\">Supprimer</a>";
         $corps .= "</li>";
     }
     $corps .= "</ul>";
@@ -49,7 +49,7 @@ function create()
 {
     $mode = "creation";
 
-    if (!isset ($_POST['mail'])) { // No email => user needs to be created
+    if (!isset ($_POST['email'])) { // No email => user needs to be created
         $data = null;
         $error = null;
         showForm($mode, $data, $error);
@@ -60,18 +60,18 @@ function create()
         if ($error == null) {
             // Generate a random validation key
             $validationKey = md5(microtime(TRUE) * 100000);
-            $data['cle'] = $validationKey;
+            $data['validation_key'] = $validationKey;
 
             $title = "Validation";
-            if (accountAlreadyExists($data['mail'])) {
-                $corps = "Un compte avec le mail " . $data['mail'] . " existe déjà<br/><a href=\"" . BASE_PATH . "score/lister\">Revenir à la liste des scores</a>";
+            if (accountAlreadyExists($data['email'])) {
+                $corps = "Un compte avec le mail " . $data['email'] . " existe déjà<br/><a href=\"" . BASE_PATH . "score/list\">Revenir à la liste des scores</a>";
             } else {
                 insertUser($data);
                 //TODO: restore before deploy //sendConfirmationEmail($donnees);
 
-                $corps = "Votre compte a été créé. <br/><a href=\"" . BASE_PATH . "score/lister\">Revenir à la liste des scores</a>"; //TODO: Restore before deploy
+                $corps = "Votre compte a été créé. <br/><a href=\"" . BASE_PATH . "score/list\">Revenir à la liste des scores</a>"; //TODO: Restore before deploy
                 /*"Votre compte à été créé. Un mail de confirmation
-     vous a été envoyé à l'adresse ".$donnees['mail'].".";*/
+     vous a été envoyé à l'adresse ".$donnees['email'].".";*/
             }
 
             require "vue.php";
@@ -85,14 +85,14 @@ function showForm($mode, $data, $errors)
 {
     if ($mode == "creation") {
         $title = "Création d'un compte";
-        $action = BASE_PATH . "utilisateur/creer";
+        $action = BASE_PATH . "user/create";
     } else if ($mode == "modification") {
         $title = "Modification";
-        $action = BASE_PATH . "utilisateur/modifier";
+        $action = BASE_PATH . "user/modify";
     }
 
     $id = $data['id'] ?? '';
-    $email = $data['mail'] ?? '';
+    $email = $data['email'] ?? '';
     $password = $data['password'] ?? '';
     $emailError = $errors['email'] ?? '';
     $passwordError = $errors['password'] ?? '';
@@ -100,8 +100,8 @@ function showForm($mode, $data, $errors)
 
     $corps = <<<EOT
 <form id="creation-form" name="creation-form" method="post" action="$action">
-    <label for="mail">Mail</label>
-    <input id="mail" type="email" name="mail" value="$email" required aria-required="true" />
+    <label for="email">Mail</label>
+    <input id="email" type="email" name="email" value="$email" required aria-required="true" />
     <p class="error">$emailError</p>
     <br>
     <label for="password">Password</label>
@@ -120,7 +120,7 @@ EOT;
 function validateForm($data): array
 {
     $error = array();
-    if (!isset($data['mail'])) {
+    if (!isset($data['email'])) {
         $error['email'] = "Mail non renseigné";
     }
     if (!isset($data['password'])) {
@@ -140,14 +140,14 @@ function accountAlreadyExists($email): bool
 
 function sendConfirmationEmail($data)
 {
-    $email = $data['mail'];
-    $validationKey = $data['cle'];
+    $email = $data['email'];
+    $validationKey = $data['validation_key'];
     $subject = "Activer votre compte " . HOST_NAME;
     $header = "From: " . CONFIRMATION_EMAIL;
     $message = 'Bienvenue sur ' . HOST_NAME . ',
 Pour activer votre compte, veuillez cliquer sur le lien ci-dessous
 ou le copier/coller dans votre navigateur.
-https://' . HOST_NAME . '/utilisateur/validation/' . urlencode($validationKey) . '
+https://' . HOST_NAME . '/user/validation/' . urlencode($validationKey) . '
 ---------------
 Ceci est un mail automatique, Merci de ne pas y répondre.';
 

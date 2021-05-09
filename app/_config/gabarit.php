@@ -9,10 +9,10 @@
 <div id="bandeau">bandeau...</div>
 <div id="auth">
     <?php
-        if (!isset($_SESSION['mail'])) {
-            echo "<a href=\"".BASE_PATH."authentification/login\">Login</a>" . " - <a href=\"".BASE_PATH."utilisateur/creer\">Sign Up</a>";
+        if (!isset($_SESSION['email'])) {
+            echo "<a href=\"".BASE_PATH."authentication/login\">Login</a>" . " - <a href=\"".BASE_PATH."user/create\">Sign Up</a>";
         } else {
-            echo $_SESSION['mail'] . " - <a href=\"".BASE_PATH."authentification/logout\">Logout</a>";
+            echo $_SESSION['email'] . " - <a href=\"".BASE_PATH."authentication/logout\">Logout</a>";
         }
     ?>
 </div>

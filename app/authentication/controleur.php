@@ -22,19 +22,19 @@ switch ($action) {
 }
 
 function login() {
-	if (!isset ($_POST['mail'])) { // No email => the user wants to log in
+	if (!isset ($_POST['email'])) { // No email => the user wants to log in
 		$data = null;
 		$errors = null;
 		showForm($data, $errors);
 	} else { // The form has been submitted
-        $user = getEmailByEmailAndPassword($_POST['mail'], $_POST['password']);
+        $user = getEmailByEmailAndPassword($_POST['email'], $_POST['password']);
 		$errors = validateForm($user);
 
 		if (count($errors) == 0){
 			authenticationSucceeded($user);
 
 			// Redirect to the list of scores
-			header ('Location:'.BASE_PATH.'score/lister');
+			header ('Location:'.BASE_PATH.'score/list');
 		} else {
 			// Authentication failed
 			showForm($_POST, $errors);
@@ -43,16 +43,16 @@ function login() {
 }
 
 function showForm($data, $errors){
-	$email = $data['mail'] ?? '';
+	$email = $data['email'] ?? '';
 	$password = $data['password'] ?? '';
 	$authError = $errors['auth'] ?? '';
-	$action = BASE_PATH."authentification/login";
+	$action = BASE_PATH."authentication/login";
 
     $title = "Authentification";
 	$corps = <<<EOT
 <form id="creation-form" name="creation-form" method="post" action="$action">
     <label for="login">Login</label>
-    <input id="mail" type="email" name="mail" value="$email" required aria-required="true" />
+    <input id="email" type="email" name="email" value="$email" required aria-required="true" />
     <p class="erreur"></p>
     <label for="password">Password</label>
     <input id="password" type="password" name="password" value="$password" required aria-required="true" />
@@ -76,11 +76,11 @@ function validateForm($data): array
 
 function authenticationSucceeded($data){
     $_SESSION['id'] = $data['id'];
-	$_SESSION['mail'] = $data['mail'];
+	$_SESSION['email'] = $data['email'];
 }
 
 function logout(){
 	session_destroy();
 
-	header ('Location: '.BASE_PATH.'score/lister');
+	header ('Location: '.BASE_PATH.'score/list');
 }

@@ -5,7 +5,7 @@ function getEmailByEmailAndPassword($email, $password): ?array
 {
     $password = md5($password);
     $db = openConnection();
-    $query = "SELECT * FROM utilisateur WHERE mail = '$email' AND password = '$password'";
+    $query = "SELECT * FROM user WHERE email = '$email' AND password = '$password'";
     $result = $db->query($query);
     closeConnection($db);
     return $result->fetch_assoc();

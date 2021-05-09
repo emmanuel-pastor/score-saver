@@ -9,16 +9,16 @@ require "modele.php";
 $action = $_GET['action'];
 
 switch ($action) {
-    case "lister":
+    case "list":
         listAll();
         break;
-    case "creer":
+    case "create":
         create();
         break;
-    case "modifier":
+    case "modify":
         modify();
         break;
-    case "supprimer":
+    case "delete":
         delete();
         break;
     default:
@@ -37,9 +37,9 @@ function listALl()
     $corps = "<ul>";
     while ($r = $result->fetch_assoc()) {
         $corps .= "<li>";
-        $corps .= 'id: ' . $r['id'] . " | score: " . $r['valeur'];
-        if (isset($_SESSION['id']) && $_SESSION['id'] == $r['idUtilisateur']) {
-            $corps .= " - <a href=\"".BASE_PATH."score/modifier/" . $r['id'] . "\">Modifier</a>";
+        $corps .= 'id: ' . $r['id'] . " | score: " . $r['value'];
+        if (isset($_SESSION['id']) && $_SESSION['id'] == $r['user_id']) {
+            $corps .= " - <a href=\"".BASE_PATH."score/modify/" . $r['id'] . "\">Modifier</a>";
             $corps .= " | <a href=\"JavaScript:alertFunction(" . $r['id'] . ")\">Supprimer</a>";
         }
         $corps .= "</li>";
@@ -48,11 +48,11 @@ function listALl()
 
     // Creation link
     if (isset($_SESSION['id'])) {
-        $corps .= "<a href=\"".BASE_PATH."score/creer\">Créer</a>";
+        $corps .= "<a href=\"".BASE_PATH."score/create\">Créer</a>";
     }
 
     // Deletion popup message
-    $deletionLink = BASE_PATH . "score/supprimer/";
+    $deletionLink = BASE_PATH . "score/delete/";
     $message = 'Voulez-vous vraiment supprimer cet enregistrement ?';
     $corps .= "<script type='text/javascript'>function alertFunction(idE){var r=confirm('$message');if(r===true){var lien = '$deletionLink'+idE;location.replace(lien);}}</script>";
 
@@ -62,7 +62,7 @@ function listALl()
 function create() {
     $mode = "creation";
 
-    if (!isset ($_POST['valeur'])) { // No value => user wants to create a new score
+    if (!isset ($_POST['value'])) { // No value => user wants to create a new score
         $data = null;
         $errors = null;
         showForm($mode, $data, $errors);
@@ -72,7 +72,7 @@ function create() {
             insertScore($_POST);
 
             // Redirect to the list of scores
-            header('Location:'.BASE_PATH.'score/lister');
+            header('Location:'.BASE_PATH.'score/list');
         } else {
             showForm($mode, $_POST, $errors);
         }
@@ -87,7 +87,7 @@ function modify()
 
     $mode = "modification";
 
-    if (!isset ($_POST["valeur"])) { // No value => user wants to modify a score
+    if (!isset ($_POST["value"])) { // No value => user wants to modify a score
         $score = getScoreById($_GET["id"]);
         $score['id'] = $_GET["id"];
         $errors = null;
@@ -100,7 +100,7 @@ function modify()
             updateScore($_POST["id"], $_POST);
 
             // Redirect to list of scores
-            header('Location:'.BASE_PATH.'score/lister');
+            header('Location:'.BASE_PATH.'score/list');
         } else {
             showForm($mode, $_POST, $errors);
         }
@@ -111,22 +111,22 @@ function showForm($mode, $data, $errors)
 {
     if ($mode == "creation") {
         $title = "Création";
-        $action = BASE_PATH."score/creer";
+        $action = BASE_PATH."score/create";
     } else if ($mode == "modification") {
         $title = "Modification";
-        $action = BASE_PATH."score/modifier";
+        $action = BASE_PATH."score/modify";
     }
 
-    $value = $data['valeur'] ?? '';
+    $value = $data['value'] ?? '';
     $id = $data['id'] ?? '';
-    $valueError = $errors['valeur'] ?? '';
+    $valueError = $errors['value'] ?? '';
     $idError = $errors['id'] ?? '';
-    $cancelFormLink = BASE_PATH."score/lister";
+    $cancelFormLink = BASE_PATH."score/list";
 
     $corps = <<<EOT
 <form id="creation-form" name="creation-form" method="post" action="$action">
-    <label for="valeur">Score</label>
-    <input id="valeur" type="text" name="valeur" value="$value" required aria-required="true" />
+    <label for="value">Score</label>
+    <input id="value" type="text" name="value" value="$value" required aria-required="true" />
     <p class="erreur">$valueError</p>
     <input type='hidden' name='id' value='$id'/>
     <p class="erreur">$idError</p>
@@ -142,8 +142,8 @@ EOT;
 function validateForm($data): array
 {
     $errors = [];
-    if (!is_numeric($data['valeur'])) {
-        $errors['valeur'] = "La valeur entrée doit être un nombre";
+    if (!is_numeric($data['value'])) {
+        $errors['value'] = "La valeur entrée doit être un nombre";
     }
     if (!isset($data['id'])) {
         $errors['id'] = "L'identifiant du score n'a pas été renseigné.";
@@ -159,5 +159,5 @@ function delete()
 
     deleteScoreById($_GET["id"]);
 
-    header('Location:'.BASE_PATH.'score/lister');
+    header('Location:'.BASE_PATH.'score/list');
 }

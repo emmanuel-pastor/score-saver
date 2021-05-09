@@ -8,4 +8,4 @@ const DB_USER = "manu";
 const DB_PASSWORD = "root";
 
 const DEFAULT_MODULE  = "score";
-const DEFAULT_ACTION = "lister";
+const DEFAULT_ACTION = "list";

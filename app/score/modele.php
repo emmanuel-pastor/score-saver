@@ -2,9 +2,9 @@
 require dirname(__FILE__) . "/../_config/DB.php";
 
 function insertScore($score){
-	$value = $score['valeur'];
+	$value = $score['value'];
 	$con = openConnection();
-	$query = "INSERT INTO score (`id`, `valeur`, `date`, `idUtilisateur`)
+	$query = "INSERT INTO score (`id`, `value`, `date`, `user_id`)
 		VALUES (NULL, '".$value."', '".date('Y-m-d')."', '".$_SESSION['id']."');";
 	$con->query($query);
 	closeConnection($con);
@@ -28,9 +28,9 @@ function getScoreById($id): ?array
 }
 
 function updateScore($id, $updatedScore){
-	$value = $updatedScore['valeur'];
+	$value = $updatedScore['value'];
 	$db = openConnection();
-	$query = "UPDATE score SET `valeur` = $value WHERE id = $id;";
+	$query = "UPDATE score SET `value` = $value WHERE id = $id;";
 	$db->query($query);
 	closeConnection($db);
 }

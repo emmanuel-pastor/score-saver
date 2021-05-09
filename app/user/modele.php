@@ -3,13 +3,13 @@ require dirname(__FILE__) . "/../_config/DB.php";
 
 function insertUser($user)
 {
-    $email = $user['mail'];
+    $email = $user['email'];
     $password = md5($user['password']);
     $isValid = 1; //TODO: pass to 0 before deploy
-    $validationKey = $user['cle'];
+    $validationKey = $user['validation_key'];
 
     $db = openConnection();
-    $query = "INSERT INTO utilisateur (`id`, `mail`, `password`, `valide`, `cle`)
+    $query = "INSERT INTO user (`id`, `email`, `password`, `is_valid`, `validation_key`)
 		VALUES (NULL, '" . $email . "', '" . $password . "', '" . $isValid . "', '" . $validationKey . "');";
     $db->query($query);
     closeConnection($db);
@@ -18,7 +18,7 @@ function insertUser($user)
 function getUserByValidationKey($key): ?array
 {
     $db = openConnection();
-    $query = "SELECT * FROM utilisateur WHERE cle = '$key'";
+    $query = "SELECT * FROM user WHERE validation_key = '$key'";
     $result = $db->query($query);
     closeConnection($db);
     return $result->fetch_assoc();
@@ -27,7 +27,7 @@ function getUserByValidationKey($key): ?array
 function validateUser($key)
 {
     $db = openConnection();
-    $query = "UPDATE utilisateur SET `valide` = 1 WHERE cle = '$key';";
+    $query = "UPDATE user SET `is_valid` = 1 WHERE validation_key = '$key';";
     $db->query($query);
     closeConnection($db);
 }
@@ -35,7 +35,7 @@ function validateUser($key)
 function getAllUsers()
 {
     $con = openConnection();
-    $query = "SELECT * FROM utilisateur";
+    $query = "SELECT * FROM user";
     $result = $con->query($query);
     closeConnection($con);
     return $result;
@@ -44,7 +44,7 @@ function getAllUsers()
 function getUserByEmail($email): ?array
 {
     $db = openConnection();
-    $query = "SELECT * FROM utilisateur WHERE mail = '$email' LIMIT 1";
+    $query = "SELECT * FROM user WHERE email = '$email' LIMIT 1";
     $result = $db->query($query);
     closeConnection($db);
     return $result->fetch_assoc();
