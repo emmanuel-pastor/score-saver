@@ -1,0 +1,49 @@
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 64px;
+    row-gap: 8px;
+
+    min-height: 80px;
+    width: 100%;
+
+    padding: 0 var(--side-padding);
+    font-size: var(--fs-large);
+
+    background: var(--color-primary);
+}
+
+nav * {
+    color: white;
+}
+
+nav > h1 {
+    margin-right: auto;
+    font-size: var(--fs-huge);
+}
+
+.auth_button {
+    border: 2px solid white;
+}
+
+.auth_button:hover {
+    color: var(--color-primary);
+    background-color: white;
+}
+
+@media only screen and (max-width: 800px) {
+    nav {
+        flex-direction: column;
+
+        padding: 16px var(--side-padding);
+    }
+
+    nav > h1 {
+        margin-right: 0;
+    }
+
+    .nav > * {
+        margin-right: 0;
+    }
+}

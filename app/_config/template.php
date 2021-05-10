@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <link href=<?php echo BASE_PATH."css/template.css"?> rel="stylesheet"/>
-    <title><?php echo $title; ?></title>
+    <link href=<?php echo BASE_PATH . "css/template.css" ?> rel="stylesheet"/>
+    <title><?php echo $title ?></title>
 </head>
 <body>
-<div id="bandeau">bandeau...</div>
-<div id="auth">
+<nav>
+    <h1><a href="<?php echo  BASE_PATH ?>"">Score Saver<a></h1>
     <?php
-        if (!isset($_SESSION['email'])) {
-            echo "<a href=\"".BASE_PATH."authentication/login\">Login</a>" . " - <a href=\"".BASE_PATH."user/create\">Sign Up</a>";
-        } else {
-            echo $_SESSION['email'] . " - <a href=\"".BASE_PATH."authentication/logout\">Logout</a>";
-        }
+    if (!isset($_SESSION['email'])) {
+        echo "<a class=\"base_button auth_button\" href=\"" . BASE_PATH . "authentication/login\">Se connecter</a>" . " <a class=\"base_button auth_button\" href=\"" . BASE_PATH . "user/create\">S'enregistrer</a>";
+    } else {
+        echo $_SESSION['email'] . " <a class=\"base_button auth_button\" href=\"" . BASE_PATH . "authentication/logout\">Se déconnecter</a>";
+    }
     ?>
-</div>
-<div id="menu">menu</div>
+</nav>
+<br/>
 <div id="corps"><?php echo $corps; ?></div>
 <footer>MOOC AppDyn</footer>
 
