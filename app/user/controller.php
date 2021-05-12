@@ -99,18 +99,16 @@ function showForm($mode, $data, $errors)
     $idError = $errors['id'] ?? '';
 
     $content = <<<EOT
-<form id="creation-form" name="creation-form" method="post" action="$action">
-    <label for="email">Mail</label>
-    <input id="email" type="email" name="email" value="$email" required aria-required="true" />
-    <p class="error">$emailError</p>
-    <br>
-    <label for="password">Password</label>
-    <input id="password" type="password" name="password" value="$password" required aria-required="true" />
-    <p class="error">$passwordError</p>
-    <br>
-    <p class="error">$idError</p>
+<form class="auth_form" name="auth_form" method="post" action="$action">
+    <label class="email_label" for="email">Adresse e-mail</label>
+    <input class="email_input" type="email" name="email" value="$email" required aria-required="true" autofocus/>
+<!--    <p class="error email_error">$emailError</p> -->
+    <label class="password_label" for="password">Mot de passe</label>
+    <input class="password_input" type="password" name="password" value="$password" required aria-required="true" />
+ <!--   <p class="error password_error">$passwordError</p>
+    <p class="error id_error">$idError</p> -->
     <input type='hidden' name='id' value='$id'/>
-    <button name='submit' type='submit' id='submit'>Valider</button>
+    <button class="base_button submit_button" name='submit' type='submit'>Valider</button>
 </form>
 EOT;
 

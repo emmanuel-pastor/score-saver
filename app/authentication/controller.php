@@ -50,15 +50,14 @@ function showForm($data, $errors){
 
     $title = "Authentification";
 	$content = <<<EOT
-<form id="creation-form" name="creation-form" method="post" action="$action">
-    <label for="login">Login</label>
-    <input id="email" type="email" name="email" value="$email" required aria-required="true" />
-    <p class="erreur"></p>
-    <label for="password">Password</label>
-    <input id="password" type="password" name="password" value="$password" required aria-required="true" />
-    <p class="erreur">$authError</p>
-    <br><br>
-    <button name='submit' type='submit' id='submit'>Valider</button>
+<form class="auth_form" name="auth_form" method="post" action="$action">
+    <label class="email_label" for="login">Adresse e-mail</label>
+    <input class="email_input" type="email" name="email" value="$email" required aria-required="true" autofocus/>
+    <!--<p class="error email_error"></p>-->
+    <label class="password_label" for="password">Mot de passe</label>
+    <input class="password_input" type="password" name="password" value="$password" required aria-required="true" />
+    <!--<p class="error password_error">$authError</p>-->
+    <button class="base_button submit_button" name='submit' type='submit'>Valider</button>
 </form>
 EOT;
 

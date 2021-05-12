@@ -1,0 +1,37 @@
+@import "common.css";
+
+.auth_form {
+    display: grid;
+    grid-template-areas:
+            "emailLabel emailInput"
+            "passwordLabel passwordInput"
+            "submitButton submitButton";
+    column-gap: calc(1.927vw + 23px);
+    row-gap: calc(1.302vw + 45px);
+}
+
+label {
+    justify-self: end;
+
+    font-size: var(--fs-large);
+}
+
+.email_label {
+    grid-area: emailLabel;
+}
+
+.email_input {
+    grid-area: emailInput;
+}
+
+.password_label {
+    grid-area: passwordLabel;
+}
+
+.password_input {
+    grid-area: passwordInput;
+}
+
+.submit_button {
+    grid-area: submitButton;
+}
