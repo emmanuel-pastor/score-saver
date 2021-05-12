@@ -2,8 +2,15 @@
 
 @import "normalize.css";
 @import "nav.css";
+@import "footer.css";
+
+html {
+    height: 100%;
+}
 
 body {
+    display: flex;
+    flex-direction: column;
     height: 100%;
 
     font-family: 'Nunito', 'Segoe UI', 'Roboto', sans-serif;
@@ -12,6 +19,7 @@ body {
     /*  VARIABLES */
     --side-padding: 6vw;
     --color-primary: #547794;
+    --color-secondary: #F6F3EE;
 
     --fs-huge: 2.0rem;
     --fs-large: 1.125rem;

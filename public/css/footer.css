@@ -1,0 +1,41 @@
+footer {
+    display: flex;
+    column-gap: 64px;
+    row-gap: 10px;
+    align-items: center;
+
+    margin: auto auto 0 auto;
+    width: 100%;
+
+    padding: 8px var(--side-padding);
+    font-size: var(--fs-medium);
+
+    background: var(--color-secondary);
+
+    --logo-size: 40px;
+}
+
+footer > a > img {
+    height: var(--logo-size);
+    width: auto;
+}
+
+.logo-insa  {
+    height: var(--logo-size);
+    width: auto;
+    margin: auto 0 auto auto;
+}
+
+p {
+    margin-block: 0;
+}
+
+@media only screen and (max-width: 800px) {
+    footer {
+        flex-direction: column;
+    }
+
+    .logo-insa {
+        margin: 0;
+    }
+}

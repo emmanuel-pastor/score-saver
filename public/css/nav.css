@@ -5,9 +5,9 @@ nav {
     column-gap: 64px;
     row-gap: 8px;
 
-    min-height: 80px;
     width: 100%;
 
+    margin: 0 auto auto auto;
     padding: 0 var(--side-padding);
     font-size: var(--fs-large);
 
