@@ -17,7 +17,7 @@
     ?>
 </nav>
 
-<div id="corps"><?php echo $corps; ?></div>
+<div class="content"><?php echo $content; ?></div>
 
 <footer>
     <p>Développé par <u>Emmanuel Pastor</u></p>

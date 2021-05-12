@@ -16,7 +16,7 @@ switch ($action) {
 	    logout();
 	    break;
     default:
-        $corps = "<h2>Erreur 404</h2><br /><a href=\"" . BASE_PATH . "\">Revenir à l'acceuil</a>";
+        $content = "<h2>Erreur 404</h2><br /><a href=\"" . BASE_PATH . "\">Revenir à l'acceuil</a>";
         require dirname(__FILE__) . "/../_config/template.php";
         break;
 }
@@ -49,7 +49,7 @@ function showForm($data, $errors){
 	$action = BASE_PATH."authentication/login";
 
     $title = "Authentification";
-	$corps = <<<EOT
+	$content = <<<EOT
 <form id="creation-form" name="creation-form" method="post" action="$action">
     <label for="login">Login</label>
     <input id="email" type="email" name="email" value="$email" required aria-required="true" />

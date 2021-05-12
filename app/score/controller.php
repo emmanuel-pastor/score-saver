@@ -22,7 +22,7 @@ switch ($action) {
         delete();
         break;
     default:
-        $corps = "<h2>Erreur 404</h2><br /><a href=\"" . BASE_PATH . "\">Revenir à l'acceuil</a>";
+        $content = "<h2>Erreur 404</h2><br /><a href=\"" . BASE_PATH . "\">Revenir à l'acceuil</a>";
         require dirname(__FILE__) . "/../_config/template.php";
         break;
 }
@@ -34,27 +34,27 @@ function listALl()
     $title = "Liste des scores";
 
     // Scores from the list
-    $corps = "<ul>";
+    $content = "<ul>";
     while ($r = $result->fetch_assoc()) {
-        $corps .= "<li>";
-        $corps .= 'id: ' . $r['id'] . " | score: " . $r['value'];
+        $content .= "<li>";
+        $content .= 'id: ' . $r['id'] . " | score: " . $r['value'];
         if (isset($_SESSION['id']) && $_SESSION['id'] == $r['user_id']) {
-            $corps .= " - <a href=\"".BASE_PATH."score/modify/" . $r['id'] . "\">Modifier</a>";
-            $corps .= " | <a href=\"JavaScript:alertFunction(" . $r['id'] . ")\">Supprimer</a>";
+            $content .= " - <a href=\"".BASE_PATH."score/modify/" . $r['id'] . "\">Modifier</a>";
+            $content .= " | <a href=\"JavaScript:alertFunction(" . $r['id'] . ")\">Supprimer</a>";
         }
-        $corps .= "</li>";
+        $content .= "</li>";
     }
-    $corps .= "</ul>";
+    $content .= "</ul>";
 
     // Creation link
     if (isset($_SESSION['id'])) {
-        $corps .= "<a href=\"".BASE_PATH."score/create\">Créer</a>";
+        $content .= "<a href=\"".BASE_PATH."score/create\">Créer</a>";
     }
 
     // Deletion popup message
     $deletionLink = BASE_PATH . "score/delete/";
     $message = 'Voulez-vous vraiment supprimer cet enregistrement ?';
-    $corps .= "<script type='text/javascript'>function alertFunction(idE){var r=confirm('$message');if(r===true){var lien = '$deletionLink'+idE;location.replace(lien);}}</script>";
+    $content .= "<script type='text/javascript'>function alertFunction(idE){var r=confirm('$message');if(r===true){var lien = '$deletionLink'+idE;location.replace(lien);}}</script>";
 
     require dirname(__FILE__) . "/../_config/template.php";
 }
@@ -123,7 +123,7 @@ function showForm($mode, $data, $errors)
     $idError = $errors['id'] ?? '';
     $cancelFormLink = BASE_PATH."score/list";
 
-    $corps = <<<EOT
+    $content = <<<EOT
 <form id="creation-form" name="creation-form" method="post" action="$action">
     <label for="value">Score</label>
     <input id="value" type="text" name="value" value="$value" required aria-required="true" />

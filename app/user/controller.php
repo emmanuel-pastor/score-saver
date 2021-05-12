@@ -22,7 +22,7 @@ switch ($action) {
         delete();
         break;
     default:
-        $corps = "<h2>Erreur 404</h2><br /><a href=\"" . BASE_PATH . "\">Revenir à l'acceuil</a>";
+        $content = "<h2>Erreur 404</h2><br /><a href=\"" . BASE_PATH . "\">Revenir à l'acceuil</a>";
         require dirname(__FILE__) . "/../_config/template.php";
         break;
 }
@@ -32,15 +32,15 @@ function listAll()
     $result = getAllUsers();
 
     $title = "Liste des utilisateurs";
-    $corps = "<ul>";
+    $content = "<ul>";
     while ($r = $result->fetch_assoc()) {
-        $corps .= "<li>";
-        $corps .= $r['id'] . ", " . $r['email'];
-        $corps .= " - <a href=\"" . BASE_PATH . "user/modify/" . $r['id'] . "\">Modifier</a>";
-        $corps .= " | <a href=\"" . BASE_PATH . "user/delete/" . $r['id'] . "\">Supprimer</a>";
-        $corps .= "</li>";
+        $content .= "<li>";
+        $content .= $r['id'] . ", " . $r['email'];
+        $content .= " - <a href=\"" . BASE_PATH . "user/modify/" . $r['id'] . "\">Modifier</a>";
+        $content .= " | <a href=\"" . BASE_PATH . "user/delete/" . $r['id'] . "\">Supprimer</a>";
+        $content .= "</li>";
     }
-    $corps .= "</ul>";
+    $content .= "</ul>";
 
     require dirname(__FILE__) . "/../_config/template.php";
 }
@@ -64,12 +64,12 @@ function create()
 
             $title = "Validation";
             if (accountAlreadyExists($data['email'])) {
-                $corps = "Un compte avec le mail " . $data['email'] . " existe déjà<br/><a href=\"" . BASE_PATH . "score/list\">Revenir à la liste des scores</a>";
+                $content = "Un compte avec le mail " . $data['email'] . " existe déjà<br/><a href=\"" . BASE_PATH . "score/list\">Revenir à la liste des scores</a>";
             } else {
                 insertUser($data);
                 //TODO: restore before deploy //sendConfirmationEmail($donnees);
 
-                $corps = "Votre compte a été créé. <br/><a href=\"" . BASE_PATH . "score/list\">Revenir à la liste des scores</a>"; //TODO: Restore before deploy
+                $content = "Votre compte a été créé. <br/><a href=\"" . BASE_PATH . "score/list\">Revenir à la liste des scores</a>"; //TODO: Restore before deploy
                 /*"Votre compte à été créé. Un mail de confirmation
      vous a été envoyé à l'adresse ".$donnees['email'].".";*/
             }
@@ -98,7 +98,7 @@ function showForm($mode, $data, $errors)
     $passwordError = $errors['password'] ?? '';
     $idError = $errors['id'] ?? '';
 
-    $corps = <<<EOT
+    $content = <<<EOT
 <form id="creation-form" name="creation-form" method="post" action="$action">
     <label for="email">Mail</label>
     <input id="email" type="email" name="email" value="$email" required aria-required="true" />
@@ -157,7 +157,7 @@ Ceci est un mail automatique, Merci de ne pas y répondre.';
 
 function modify()
 {
-    $corps = "Page pas encore implémentée";
+    $content = "Page pas encore implémentée";
     require dirname(__FILE__) . "/../_config/template.php";
     //todo implement
     //if admin, make update request
@@ -166,7 +166,7 @@ function modify()
 
 function delete()
 {
-    $corps = "Page pas encore implémentée";
+    $content = "Page pas encore implémentée";
     require dirname(__FILE__) . "/../_config/template.php";
     //todo implement
     //if admin, make delete request
