@@ -101,14 +101,20 @@ function showForm($mode, $data, $errors)
     $content = <<<EOT
 <form class="auth_form" name="auth_form" method="post" action="$action">
     <label class="email_label" for="email">Adresse e-mail</label>
-    <input class="email_input" type="email" name="email" value="$email" required aria-required="true" autofocus/>
-<!--    <p class="error email_error">$emailError</p> -->
+    <div class="email input_with_error">
+        <input class="email_input" type="email" name="email" value="$email" required aria-required="true" autofocus/>
+        <p class="error">$emailError</p>
+    </div>
     <label class="password_label" for="password">Mot de passe</label>
-    <input class="password_input" type="password" name="password" value="$password" required aria-required="true" />
- <!--   <p class="error password_error">$passwordError</p>
-    <p class="error id_error">$idError</p> -->
-    <input type='hidden' name='id' value='$id'/>
-    <button class="base_button submit_button" name='submit' type='submit'>Valider</button>
+    <div class="password input_with_error">
+        <input class="password_input" type="password" name="password" value="$password" required aria-required="true" />
+        <p class="error">$passwordError</p>
+    </div>
+    <div class="submit_auth">
+        <input type='hidden' name='id' value='$id'/>
+        <p class="error id_error">$idError</p>
+        <button class="base_button submit_button" name='submit' type='submit'>Valider</button>
+    </div>
 </form>
 EOT;
 

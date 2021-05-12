@@ -52,11 +52,16 @@ function showForm($data, $errors){
 	$content = <<<EOT
 <form class="auth_form" name="auth_form" method="post" action="$action">
     <label class="email_label" for="login">Adresse e-mail</label>
-    <input class="email_input" type="email" name="email" value="$email" required aria-required="true" autofocus/>
-    <!--<p class="error email_error"></p>-->
+    <div class="email input_with_error">
+        <input class="email_input" type="email" name="email" value="$email" required aria-required="true" autofocus/>
+        <p class="error"></p>
+    </div>
+    
     <label class="password_label" for="password">Mot de passe</label>
-    <input class="password_input" type="password" name="password" value="$password" required aria-required="true" />
-    <!--<p class="error password_error">$authError</p>-->
+    <div class="password input_with_error">
+        <input class="password_input" type="password" name="password" value="$password" required aria-required="true" />
+        <p class="error">$authError</p>
+    </div>
     <button class="base_button submit_button" name='submit' type='submit'>Valider</button>
 </form>
 EOT;

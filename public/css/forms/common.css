@@ -18,3 +18,13 @@ input:focus {
     border: none;
     background-color: var(--color-primary);
 }
+
+.error {
+    color: var(--color-error);
+}
+
+.input_with_error {
+    display: flex;
+    flex-direction: column;
+    row-gap: 6px;
+}

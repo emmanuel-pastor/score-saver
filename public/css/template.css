@@ -21,6 +21,7 @@ body {
     --side-padding: 6vw;
     --color-primary: #547794;
     --color-secondary: #F6F3EE;
+    --color-error: #E85959;
 
     --fs-huge: 2.0rem;
     --fs-large: 1.125rem;

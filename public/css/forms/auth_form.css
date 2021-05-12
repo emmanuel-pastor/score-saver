@@ -3,9 +3,9 @@
 .auth_form {
     display: grid;
     grid-template-areas:
-            "emailLabel emailInput"
-            "passwordLabel passwordInput"
-            "submitButton submitButton";
+            "emailLabel email"
+            "passwordLabel password"
+            "submitAuth submitAuth";
     column-gap: calc(1.927vw + 23px);
     row-gap: calc(1.302vw + 45px);
 }
@@ -16,12 +16,20 @@ label {
     font-size: var(--fs-large);
 }
 
+.email {
+    grid-area: email;
+}
+
 .email_label {
     grid-area: emailLabel;
 }
 
 .email_input {
     grid-area: emailInput;
+}
+
+.password {
+    grid-area: password;
 }
 
 .password_label {
@@ -32,6 +40,14 @@ label {
     grid-area: passwordInput;
 }
 
+.submit_auth {
+    display: flex;
+    flex-direction: column;
+    grid-area: submitAuth;
+    align-items: center;
+    row-gap: 15px;
+}
+
 .submit_button {
-    grid-area: submitButton;
+    grid-area: submitAuth;
 }
