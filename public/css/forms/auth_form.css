@@ -48,6 +48,6 @@ label {
     row-gap: 15px;
 }
 
-.submit_button {
+#validate_login {
     grid-area: submitAuth;
 }

@@ -62,7 +62,7 @@ function showForm($data, $errors){
         <input class="password_input" type="password" name="password" value="$password" required aria-required="true" />
         <p class="error">$authError</p>
     </div>
-    <button class="base_button submit_button" name='submit' type='submit'>Valider</button>
+    <button class="base_button submit_button" id="validate_login" name='submit' type='submit'>Valider</button>
 </form>
 EOT;
 
