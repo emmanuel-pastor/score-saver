@@ -124,15 +124,18 @@ function showForm($mode, $data, $errors)
     $cancelFormLink = BASE_PATH."score/list";
 
     $content = <<<EOT
-<form id="creation-form" name="creation-form" method="post" action="$action">
+<form class="score_form" name="score_form" method="post" action="$action">
     <label for="value">Score</label>
-    <input id="value" type="text" name="value" value="$value" required aria-required="true" />
-    <p class="erreur">$valueError</p>
-    <input type='hidden' name='id' value='$id'/>
-    <p class="erreur">$idError</p>
-    <br>
-    <input type="button" value="Annuler" onclick="location.href='$cancelFormLink'">
-    <button name='submit' type='submit' id='submit'>Valider</button>
+    <div class="input_with_error score">
+        <input class="score_input" type="text" name="value" value="$value" required aria-required="true" autofocus/>
+        <p class="error">$valueError</p>
+    </div>
+    <div class="submit_score">
+        <input type='hidden' name='id' value='$id'/>
+        <p class="error id_error">$idError</p>
+        <button class="base_button cancel_button" type="button" onclick="location.href='$cancelFormLink'">Annuler</button>
+        <button class="base_button submit_button" id="validate_score_button" name='submit' type='submit' id='submit'>Valider</button>
+    </div>
 </form>
 EOT;
 

@@ -1,0 +1,47 @@
+@import "common.css";
+
+.score_form {
+    display: grid;
+    grid-template-areas:
+            "scoreLabel score"
+            "submitScore submitScore";
+    column-gap: calc(1.927vw + 23px);
+    row-gap: calc(1.302vw + 45px);
+}
+
+.score_label {
+    grid-area: scoreLabel;
+}
+
+.score {
+    grid-area: score;
+}
+
+.submit_score {
+    display: grid;
+    grid-template-areas:
+            "idError idError"
+            "cancelButton validateScoreButton";
+    grid-area: submitScore;
+    align-content: center;
+    column-gap: 40px;
+    row-gap: 15px;
+}
+
+.id_error {
+    grid-area: idError;
+}
+
+.cancel_button {
+    grid-area: cancelButton;
+
+    color: var(--color-primary) !important;
+    border: solid 2px var(--color-primary);
+    background-color: white;
+}
+
+#validate_score_button {
+    grid-area: validateScoreButton;
+    justify-self: auto !important;
+}
+
