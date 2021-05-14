@@ -51,6 +51,12 @@ body {
     cursor: pointer;
 }
 
+.redirect_link {
+    font-size: var(--fs-large);
+    text-decoration: underline;
+    color: var(--color-primary)
+}
+
 @media only screen and (max-width: 800px) {
     body {
         --fs-huge: 1.125rem;

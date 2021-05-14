@@ -63,12 +63,12 @@ function create()
 
             $title = "Validation";
             if (accountAlreadyExists($data['email'])) {
-                $content = "Un compte avec le mail " . $data['email'] . " existe déjà<br/><a href=\"" . BASE_PATH . "score/list\">Revenir à la liste des scores</a>";
+                $content = "Un compte avec le mail " . $data['email'] . " existe déjà<br/><br/><a class='redirect_link' href=\"" . BASE_PATH . "score/list\">Revenir à la liste des scores</a>";
             } else {
                 insertUser($data);
                 //TODO: restore before deploy //sendConfirmationEmail($donnees);
 
-                $content = "Votre compte a été créé. <br/><a href=\"" . BASE_PATH . "score/list\">Revenir à la liste des scores</a>"; //TODO: Restore before deploy
+                $content = "Votre compte a été créé. <br/><br/><a class='redirect_link' href=\"" . BASE_PATH . "score/list\">Revenir à la liste des scores</a>"; //TODO: Restore before deploy
                 /*"Votre compte à été créé. Un mail de confirmation
      vous a été envoyé à l'adresse ".$donnees['email'].".";*/
             }
