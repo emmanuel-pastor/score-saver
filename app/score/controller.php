@@ -22,8 +22,7 @@ switch ($action) {
         delete();
         break;
     default:
-        $content = "<h2>Erreur 404</h2><br /><a href=\"" . BASE_PATH . "\">Revenir à l'acceuil</a>";
-        require dirname(__FILE__) . "/../_config/template.php";
+        require dirname(__FILE__) . "/../../public/404.php";
         break;
 }
 
@@ -123,6 +122,7 @@ function showForm($mode, $data, $errors)
     $idError = $errors['id'] ?? '';
     $cancelFormLink = BASE_PATH."score/list";
 
+    $stylesheet = "forms/score_form.css";
     $content = <<<EOT
 <form class="score_form" name="score_form" method="post" action="$action">
     <label for="value">Score</label>

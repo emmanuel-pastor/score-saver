@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link href=<?php echo BASE_PATH . "css/template.css" ?> rel="stylesheet"/>
+    <link href=<?php echo BASE_PATH . "css/" . $stylesheet ?> rel="stylesheet"/>
     <title><?php echo $title ?></title>
 </head>
 <body>

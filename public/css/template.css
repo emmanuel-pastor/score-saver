@@ -3,8 +3,6 @@
 @import "normalize.css";
 @import "nav.css";
 @import "footer.css";
-@import "forms/auth_form.css";
-@import "forms/score_form.css";
 
 html {
     height: 100%;

@@ -1,0 +1,13 @@
+.http_error_image {
+    max-width: 60vw;
+    height: auto;
+
+    margin-bottom: 60px;
+}
+
+.http_error_message {
+    font-size: var(--fs-huge);
+    font-weight: bold;
+
+    text-align: center;
+}

@@ -1,0 +1,5 @@
+@import "common.css";
+
+.http_error_message {
+    color: #115F9F;
+}

@@ -16,8 +16,7 @@ switch ($action) {
 	    logout();
 	    break;
     default:
-        $content = "<h2>Erreur 404</h2><br /><a href=\"" . BASE_PATH . "\">Revenir à l'acceuil</a>";
-        require dirname(__FILE__) . "/../_config/template.php";
+        require dirname(__FILE__) . "/../../public/404.php";
         break;
 }
 
@@ -49,6 +48,7 @@ function showForm($data, $errors){
 	$action = BASE_PATH."authentication/login";
 
     $title = "Authentification";
+    $stylesheet = "forms/auth_form.css";
 	$content = <<<EOT
 <form class="auth_form" name="auth_form" method="post" action="$action">
     <label class="email_label" for="login">Adresse e-mail</label>
