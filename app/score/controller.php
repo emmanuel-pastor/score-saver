@@ -31,23 +31,23 @@ function listALl()
     $result = getAllScores();
 
     $title = "Liste des scores";
+    $stylesheet = "scores.css";
 
     // Scores from the list
-    $content = "<ul>";
+    $content = "<div class='score_list'>";
+    $content .= "<span class='score_list_item'><span>id</span><span><strong>score</strong></span></span>";
     while ($r = $result->fetch_assoc()) {
-        $content .= "<li>";
-        $content .= 'id: ' . $r['id'] . " | score: " . $r['value'];
+        $content .= "<span class='score_list_item score_card'><span>" . $r['id'] . "</span><span><strong>" . $r['value'] . "</span></strong></span>";
         if (isset($_SESSION['id']) && $_SESSION['id'] == $r['user_id']) {
-            $content .= " - <a href=\"".BASE_PATH."score/modify/" . $r['id'] . "\">Modifier</a>";
-            $content .= " | <a href=\"JavaScript:alertFunction(" . $r['id'] . ")\">Supprimer</a>";
+            $content .= "<a class='action_button modify_button' href=\"".BASE_PATH."score/modify/" . $r['id'] . "\"><img src=\"" . BASE_PATH . "img/ic-edit.svg\" alt='Modifier le score'/></a>";
+            $content .= "<a class='action_button delete_button' href=\"JavaScript:alertFunction(" . $r['id'] . ")\"><img src=\"" . BASE_PATH . "img/ic-delete.svg\" alt='SUpprimer le score'/></a>";
         }
-        $content .= "</li>";
     }
-    $content .= "</ul>";
+    $content .= "</div>";
 
     // Creation link
     if (isset($_SESSION['id'])) {
-        $content .= "<a href=\"".BASE_PATH."score/create\">Créer</a>";
+        $content .= "<a class='base_button create_score_button' href=\"".BASE_PATH."score/create\">Ajouter score</a>";
     }
 
     // Deletion popup message

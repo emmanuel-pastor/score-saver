@@ -1,0 +1,59 @@
+.score_list {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    column-gap: 40px;
+    row-gap: 20px;
+
+    font-size: var(--fs-large);
+
+    list-style: none;
+}
+
+.score_list_item {
+    grid-column: 1;
+    display: flex;
+    align-items: center;
+    column-gap: 40px;
+
+    padding: 20px 15px;
+}
+
+.score_card {
+    border-radius: 15px;
+
+    box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
+}
+
+.action_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 50px;
+    height: 50px;
+
+    border-radius: 100px;
+}
+
+.action_button > img {
+    color: white;
+}
+
+.modify_button {
+    grid-column: 2;
+
+    background-color: var(--color-primary);
+}
+
+.delete_button {
+    grid-column: 3;
+
+    background-color: var(--color-error);
+}
+
+.create_score_button {
+    margin-top: 40px;
+
+    background-color: var(--color-primary);
+}
