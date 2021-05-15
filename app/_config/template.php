@@ -32,11 +32,12 @@
 
 </body>
 <script>
+    <?php echo "let url = '" . BASE_PATH . "time/get';" ?>
     getTime();
     setInterval(getTime, 1000);
     function getTime() {
         $.ajax({
-            url: '../public/time/get',
+            url: url,
             dataType: "json",
             success: function(response) {
                 let h = response.hour;
