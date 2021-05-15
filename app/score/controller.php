@@ -34,16 +34,20 @@ function listALl()
     $stylesheet = "scores.css";
 
     // Scores from the list
-    $content = "<div class='score_list'>";
-    $content .= "<span class='score_list_item'><span>id</span><span><strong>score</strong></span></span>";
-    while ($r = $result->fetch_assoc()) {
-        $content .= "<span class='score_list_item score_card'><span>" . $r['id'] . "</span><span><strong>" . $r['value'] . "</span></strong></span>";
-        if (isset($_SESSION['id']) && $_SESSION['id'] == $r['user_id']) {
-            $content .= "<a class='action_button modify_button' href=\"".BASE_PATH."score/modify/" . $r['id'] . "\"><img src=\"" . BASE_PATH . "img/ic-edit.svg\" alt='Modifier le score'/></a>";
-            $content .= "<a class='action_button delete_button' href=\"JavaScript:alertFunction(" . $r['id'] . ")\"><img src=\"" . BASE_PATH . "img/ic-delete.svg\" alt='SUpprimer le score'/></a>";
+    if ($result && mysqli_num_rows($result) > 0) {
+        $content = "<div class='score_list'>";
+        $content .= "<span class='score_list_item'><span>id</span><span><strong>score</strong></span></span>";
+        while ($r = $result->fetch_assoc()) {
+            $content .= "<span class='score_list_item score_card'><span>" . $r['id'] . "</span><span><strong>" . $r['value'] . "</span></strong></span>";
+            if (isset($_SESSION['id']) && $_SESSION['id'] == $r['user_id']) {
+                $content .= "<a class='action_button modify_button' href=\"" . BASE_PATH . "score/modify/" . $r['id'] . "\"><img src=\"" . BASE_PATH . "img/ic-edit.svg\" alt='Modifier le score'/></a>";
+                $content .= "<a class='action_button delete_button' href=\"JavaScript:alertFunction(" . $r['id'] . ")\"><img src=\"" . BASE_PATH . "img/ic-delete.svg\" alt='SUpprimer le score'/></a>";
+            }
         }
+        $content .= "</div>";
+    } else {
+        $content .= "<h3>Aucun score enregistré pour le moment.</h3>";
     }
-    $content .= "</div>";
 
     // Creation link
     if (isset($_SESSION['id'])) {
@@ -58,7 +62,8 @@ function listALl()
     require dirname(__FILE__) . "/../_config/template.php";
 }
 
-function create() {
+function create()
+{
     $mode = "creation";
 
     if (!isset ($_POST['value'])) { // No value => user wants to create a new score
@@ -71,7 +76,7 @@ function create() {
             insertScore($_POST);
 
             // Redirect to the list of scores
-            header('Location:'.BASE_PATH.'score/list');
+            header('Location:' . BASE_PATH . 'score/list');
         } else {
             showForm($mode, $_POST, $errors);
         }
@@ -99,7 +104,7 @@ function modify()
             updateScore($_POST["id"], $_POST);
 
             // Redirect to list of scores
-            header('Location:'.BASE_PATH.'score/list');
+            header('Location:' . BASE_PATH . 'score/list');
         } else {
             showForm($mode, $_POST, $errors);
         }
@@ -110,17 +115,17 @@ function showForm($mode, $data, $errors)
 {
     if ($mode == "creation") {
         $title = "Création";
-        $action = BASE_PATH."score/create";
+        $action = BASE_PATH . "score/create";
     } else if ($mode == "modification") {
         $title = "Modification";
-        $action = BASE_PATH."score/modify";
+        $action = BASE_PATH . "score/modify";
     }
 
     $value = $data['value'] ?? '';
     $id = $data['id'] ?? '';
     $valueError = $errors['value'] ?? '';
     $idError = $errors['id'] ?? '';
-    $cancelFormLink = BASE_PATH."score/list";
+    $cancelFormLink = BASE_PATH . "score/list";
 
     $stylesheet = "forms/score_form.css";
     $content = <<<EOT
@@ -162,5 +167,5 @@ function delete()
 
     deleteScoreById($_GET["id"]);
 
-    header('Location:'.BASE_PATH.'score/list');
+    header('Location:' . BASE_PATH . 'score/list');
 }
