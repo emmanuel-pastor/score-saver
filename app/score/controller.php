@@ -46,7 +46,7 @@ function listALl()
         }
         $content .= "</div>";
     } else {
-        $content .= "<h3>Aucun score enregistré pour le moment.</h3>";
+        $content = "<h3>Aucun score enregistré pour le moment.</h3>";
     }
 
     // Creation link
