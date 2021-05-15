@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link href=<?php echo BASE_PATH . "css/template.css" ?> rel="stylesheet"/>
-    <link href=<?php echo BASE_PATH . "css/" . $stylesheet ?> rel="stylesheet"/>
+    <link href=<?php $stylesheet = $stylesheet ?? ''; echo BASE_PATH . "css/" . $stylesheet ?> rel="stylesheet"/>
     <script  src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
     <title><?php echo $title ?></title>
 </head>
