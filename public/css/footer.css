@@ -20,10 +20,14 @@ footer > a > img {
     width: auto;
 }
 
+#time {
+    margin: auto 0 auto auto;
+}
+
 .logo-insa  {
     height: var(--logo-size);
     width: auto;
-    margin: auto 0 auto auto;
+    margin: auto 0 auto 0;
 }
 
 p {
