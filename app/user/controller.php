@@ -68,7 +68,7 @@ function create()
                 insertUser($data);
                 //TODO: restore before deploy //sendConfirmationEmail($donnees);
 
-                $content = "Votre compte a été créé. <br/><br/><a class='redirect_link' href=\"" . BASE_PATH . "score/list\">Revenir à la liste des scores</a>"; //TODO: Restore before deploy
+                $content = "Votre compte a été créé. <br/><br/><a class='redirect_link' href=\"" . BASE_PATH . "authentication/login\">Aller vers la page de connexion</a>"; //TODO: Restore before deploy
                 /*"Votre compte à été créé. Un mail de confirmation
      vous a été envoyé à l'adresse ".$donnees['email'].".";*/
             }
