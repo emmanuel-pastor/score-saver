@@ -24,19 +24,19 @@ function createUserTableIfNotExists()
 
 function createScoreTableIfNotExists() {
     $db = openBaseConnection();
-    $scoreTablesCreationQUery = "CREATE TABLE IF NOT EXISTS `score` (
+    $scoreTablesCreationQuery = "CREATE TABLE IF NOT EXISTS `score` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `value` int(5) NOT NULL,
   `date` date NOT NULL,
   `user_id` int(3) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
-    $db->query($scoreTablesCreationQUery);
+    $db->query($scoreTablesCreationQuery);
     closeConnection($db);
 }
 
 function openBaseConnection() {
-    return mysqli_connect(HOST_NAME, DB_USER, DB_PASSWORD, DB_NAME);
+    return mysqli_connect('localhost', DB_USER, DB_PASSWORD, DB_NAME);
 }
 
 function closeConnection($connection)
