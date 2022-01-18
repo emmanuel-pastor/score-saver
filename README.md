@@ -1,9 +1,5 @@
 # Comment faire fonctionner ce projet sur votre machine ?
 
-<br/>
-
-**Note:** Le site est testable directement en ligne à <a href="https://www.ssa-apis.com" target="_blank" rel="noopener noreferrer">ssa-apis.com</a>
-
 Un utilisateur de test existe déjà. **Adresse e-mail:** `user@test`. **Mot de passe:** `0000`.
 
 <br/>
